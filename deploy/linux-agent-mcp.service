@@ -1,0 +1,39 @@
+[Unit]
+Description=Linux Agent MCP server (Streamable HTTP, localhost)
+Documentation=file:///home/linuxagent/linux-agent/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Adjust User, Group, WorkingDirectory and ExecStart to the account and checkout
+# that will run the server. Keep the service bound to 127.0.0.1 unless you add
+# authentication and TLS in front of it. `systemd-analyze verify` reports the
+# ExecStart path as missing until these placeholders are replaced.
+User=linuxagent
+Group=linuxagent
+WorkingDirectory=/home/linuxagent/linux-agent
+Environment=LINUX_AGENT_ALLOW_WRITE=0
+EnvironmentFile=-/etc/linux-agent/agent.env
+ExecStart=/home/linuxagent/linux-agent/.venv/bin/python /home/linuxagent/linux-agent/server.py --transport streamable-http --host 127.0.0.1 --port 8000
+Restart=on-failure
+RestartSec=3
+
+# Hardening: the MCP server never needs root. Writes are delegated to the two
+# root-owned helpers through the narrow sudoers rule in this directory.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/linuxagent/linux-agent/logs
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=yes
+LockPersonality=yes
+CapabilityBoundingSet=
+AmbientCapabilities=
+
+[Install]
+WantedBy=multi-user.target

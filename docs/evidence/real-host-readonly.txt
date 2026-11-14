@@ -1,0 +1,125 @@
+Linux Agent - read-only real-host evidence
+Host: lcsang-G3-3590
+========================================================================
+
+### system_overview {}
+------------------------------------------------------------------------
+Host: lcsang-G3-3590
+OS: Ubuntu 26.04.1 LTS
+Kernel: 7.0.0-43-generic (x86_64)
+Python: 3.14.4
+Uptime: 0.7 hours (booted 2026-11-14 21:43)
+Load (1m, 5m, 15m): 1.51, 0.96, 0.87
+CPU: 8 logical cores
+Memory: 5.4 GiB used of 14.9 GiB (9.5 GiB available)
+Systemd: running
+User: lcsang
+
+### disk_usage {}
+------------------------------------------------------------------------
+Filesystem     Type      Size  Used Avail Use% Mounted on
+tmpfs          tmpfs     3.0G  3.4M  3.0G   1% /run
+/dev/nvme0n1p7 ext4       79G   66G  9.0G  88% /
+tmpfs          tmpfs     7.5G   16M  7.5G   1% /dev/shm
+efivarfs       efivarfs  384K  105K  275K  28% /sys/firmware/efi/efivars
+none           tmpfs     1.0M     0  1.0M   0% /run/credentials/systemd-journald.service
+none           tmpfs     1.0M     0  1.0M   0% /run/credentials/systemd-resolved.service
+/dev/nvme0n1p1 vfat       96M   50M   47M  52% /boot/efi
+tmpfs          tmpfs     7.5G   53M  7.5G   1% /tmp
+tmpfs          tmpfs     1.5G  212K  1.5G   1% /run/user/1000
+
+### service_status {'name': 'nginx'}
+------------------------------------------------------------------------
+Unit: nginx
+Exit code: 0
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: enabled)
+     Active: active (running) since Sat 2026-11-14 21:43:45 +07; 42min ago
+ Invocation: 7efbf0ca3338462eb7026a82973f9889
+       Docs: man:nginx(8)
+    Process: 3415 ExecStartPre=/usr/sbin/nginx -t -q -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+    Process: 3427 ExecStart=/usr/sbin/nginx -g daemon on; master_process on; (code=exited, status=0/SUCCESS)
+   Main PID: 3440 (nginx)
+      Tasks: 9 (limit: 18305)
+     Memory: 9.2M (peak: 10.5M)
+        CPU: 54ms
+     CGroup: /system.slice/nginx.service
+             ├─3440 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"
+             ├─3441 "nginx: worker process"
+             ├─3442 "nginx: worker process"
+             ├─3443 "nginx: worker process"
+             ├─3444 "nginx: worker process"
+             ├─3445 "nginx: worker process"
+             ├─3446 "nginx: worker process"
+             ├─3447 "nginx: worker process"
+             └─3449 "nginx: worker process"
+
+Nov 14 21:43:45 lcsang-G3-3590 systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+Nov 14 21:43:45 lcsang-G3-3590 systemd[1]: Started nginx.service - A high performance web server and a reverse proxy server.
+
+### failed_units {}
+------------------------------------------------------------------------
+No failed units.
+
+### nginx_list_parameters {}
+------------------------------------------------------------------------
+PARAMETER                CONTEXT VALUE ALLOWED
+worker_processes         main    auto  auto or 1-64
+worker_connections       events  768   128-65535
+client_max_body_size     http    unset 0 or size (k/m/g), max 10g
+keepalive_timeout        http    unset 0-600 seconds
+client_body_timeout      http    unset 0-300 seconds
+send_timeout             http    unset 0-300 seconds
+gzip                     http    on    on or off
+server_tokens            http    build on or off
+
+### http_probe {'url': 'http://127.0.0.1/'}
+------------------------------------------------------------------------
+URL: http://127.0.0.1/
+Status: 200 OK
+Latency: 4.1 ms
+Content-Type: text/html
+Content-Length: 615
+
+Headers:
+server: nginx/1.28.3 (Ubuntu)
+date: Sat, 14 Nov 2026 15:26:31 GMT
+content-type: text/html
+last-modified: Thu, 05 Nov 2026 01:40:11 GMT
+transfer-encoding: chunked
+connection: keep-alive
+etag: W/"6aebde7b-267"
+content-encoding: gzip
+
+Body preview:
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+
+### container_list {}
+------------------------------------------------------------------------
+legalflow-api	legalflow-team-backend	Up 42 minutes (healthy)	127.0.0.1:3001->3001/tcp
+legalflow-n8n	n8nio/n8n:latest	Up 42 minutes	127.0.0.1:5678->5678/tcp
+legalflow-postgres	postgres:16-alpine	Up 42 minutes (healthy)	127.0.0.1:5432->5432/tcp
+portainer	portainer/portainer-ce:lts	Up 42 minutes	8000/tcp, 9000/tcp, 127.0.0.1:9443->9443/tcp

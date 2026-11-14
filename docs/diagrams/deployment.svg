@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="460" viewBox="0 0 1000 460">
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      .title { font: 700 19px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .h { font: 700 14px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .t { font: 11.5px "DejaVu Sans", sans-serif; fill: #334155; }
+      .small { font: 10.5px "DejaVu Sans", sans-serif; fill: #475569; }
+      .panel { fill: #f8fafc; stroke: #64748b; stroke-width: 1.2; rx: 10; }
+      .box { fill: #ffffff; stroke: #475569; stroke-width: 1.2; rx: 7; }
+      .blue { fill: #e0f2fe; stroke: #0369a1; stroke-width: 1.2; rx: 7; }
+      .amber { fill: #fef3c7; stroke: #b45309; stroke-width: 1.2; rx: 7; }
+      .green { fill: #dcfce7; stroke: #15803d; stroke-width: 1.2; rx: 7; }
+      .red { fill: #fee2e2; stroke: #b91c1c; stroke-width: 1.2; rx: 7; }
+      .arrow { stroke: #334155; stroke-width: 1.5; fill: none; marker-end: url(#a); }
+    </style>
+  </defs>
+
+  <rect width="1000" height="460" fill="#ffffff"/>
+  <text x="500" y="28" text-anchor="middle" class="title">Deployment topologies</text>
+
+  <rect x="25" y="55" width="300" height="370" class="panel"/>
+  <text x="175" y="80" text-anchor="middle" class="h">(a) Local stdio (default)</text>
+  <rect x="55" y="105" width="240" height="62" class="blue"/>
+  <text x="175" y="130" text-anchor="middle" class="h">agent.py</text>
+  <text x="175" y="150" text-anchor="middle" class="small">Groq + MCP client</text>
+  <line x1="175" y1="167" x2="175" y2="205" class="arrow"/>
+  <text x="185" y="190" class="small">spawn + stdin/stdout</text>
+  <rect x="55" y="210" width="240" height="62" class="amber"/>
+  <text x="175" y="235" text-anchor="middle" class="h">server.py</text>
+  <text x="175" y="255" text-anchor="middle" class="small">MCP server (child)</text>
+  <line x1="175" y1="272" x2="175" y2="310" class="arrow"/>
+  <rect x="55" y="315" width="240" height="62" class="green"/>
+  <text x="175" y="340" text-anchor="middle" class="h">Linux host</text>
+  <text x="175" y="360" text-anchor="middle" class="small">same user, no listener</text>
+  <text x="175" y="405" text-anchor="middle" class="small">Best for the course demo.</text>
+
+  <rect x="350" y="55" width="300" height="370" class="panel"/>
+  <text x="500" y="80" text-anchor="middle" class="h">(b) Local HTTP</text>
+  <rect x="380" y="105" width="240" height="62" class="blue"/>
+  <text x="500" y="130" text-anchor="middle" class="h">agent.py</text>
+  <text x="500" y="150" text-anchor="middle" class="small">HTTP MCP client</text>
+  <line x1="500" y1="167" x2="500" y2="205" class="arrow"/>
+  <text x="510" y="190" class="small">http://127.0.0.1:8000/mcp</text>
+  <rect x="380" y="210" width="240" height="62" class="amber"/>
+  <text x="500" y="235" text-anchor="middle" class="h">systemd service</text>
+  <text x="500" y="255" text-anchor="middle" class="small">server.py, dedicated user</text>
+  <line x1="500" y1="272" x2="500" y2="310" class="arrow"/>
+  <rect x="380" y="315" width="240" height="62" class="green"/>
+  <text x="500" y="340" text-anchor="middle" class="h">Linux host + helpers</text>
+  <text x="500" y="360" text-anchor="middle" class="small">localhost only by default</text>
+  <text x="500" y="405" text-anchor="middle" class="small">Good for a separate server process.</text>
+
+  <rect x="675" y="55" width="300" height="370" class="panel"/>
+  <text x="825" y="80" text-anchor="middle" class="h">(c) Remote (future work)</text>
+  <rect x="705" y="105" width="240" height="62" class="blue"/>
+  <text x="825" y="130" text-anchor="middle" class="h">Remote agent</text>
+  <text x="825" y="150" text-anchor="middle" class="small">authenticated MCP client</text>
+  <line x1="825" y1="167" x2="825" y2="205" class="arrow"/>
+  <text x="835" y="190" class="small">TLS + OAuth / mTLS</text>
+  <rect x="705" y="210" width="240" height="62" class="red"/>
+  <text x="825" y="235" text-anchor="middle" class="h">Authenticated proxy</text>
+  <text x="825" y="255" text-anchor="middle" class="small">not built in this project</text>
+  <line x1="825" y1="272" x2="825" y2="310" class="arrow"/>
+  <rect x="705" y="315" width="240" height="62" class="amber"/>
+  <text x="825" y="340" text-anchor="middle" class="h">MCP server</text>
+  <text x="825" y="360" text-anchor="middle" class="small">localhost listener</text>
+  <text x="825" y="405" text-anchor="middle" class="small">Requires additional security work.</text>
+</svg>

@@ -1,0 +1,15 @@
+# Example sudoers rule for Linux Agent. This file is documentation, not an
+# installer: scripts/install_privileged.sh writes the live rule after validating
+# it with visudo. If you copy this file manually, install it as root:root 0440:
+#
+#   sudo install -o root -g root -m 0440 deploy/sudoers.linux-agent.example \
+#       /etc/sudoers.d/linux-agent
+#   sudo visudo -c
+#
+# Replace "linuxagent" with the account that runs the agent. The helpers must
+# stay root-owned and non-writable by that account. No other commands belong in
+# this file.
+
+Cmnd_Alias LINUX_AGENT_HELPERS = /usr/local/libexec/linux-agent/nginx_param.sh, /usr/local/libexec/linux-agent/service_ctl.sh
+
+linuxagent ALL=(root) NOPASSWD: LINUX_AGENT_HELPERS
