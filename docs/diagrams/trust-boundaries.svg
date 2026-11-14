@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      .title { font: 700 19px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .h { font: 700 14px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .t { font: 11.5px "DejaVu Sans", sans-serif; fill: #334155; }
+      .small { font: 10.5px "DejaVu Sans", sans-serif; fill: #475569; }
+      .untrusted { fill: #fef2f2; stroke: #b91c1c; stroke-width: 1.5; stroke-dasharray: 7 5; rx: 12; }
+      .validated { fill: #fffbeb; stroke: #b45309; stroke-width: 1.5; stroke-dasharray: 7 5; rx: 12; }
+      .privileged { fill: #f0fdf4; stroke: #15803d; stroke-width: 1.5; stroke-dasharray: 7 5; rx: 12; }
+      .kernel { fill: #eff6ff; stroke: #1d4ed8; stroke-width: 1.5; rx: 12; }
+      .box { fill: #ffffff; stroke: #475569; stroke-width: 1.2; rx: 8; }
+      .redbox { fill: #fee2e2; stroke: #b91c1c; stroke-width: 1.2; rx: 8; }
+      .amberbox { fill: #fef3c7; stroke: #b45309; stroke-width: 1.2; rx: 8; }
+      .greenbox { fill: #dcfce7; stroke: #15803d; stroke-width: 1.2; rx: 8; }
+      .arrow { stroke: #334155; stroke-width: 1.6; fill: none; marker-end: url(#a); }
+    </style>
+  </defs>
+
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="28" text-anchor="middle" class="title">Trust boundaries and validation layers</text>
+
+  <rect x="30" y="55" width="250" height="460" class="untrusted"/>
+  <text x="155" y="80" text-anchor="middle" class="h">Untrusted model output</text>
+  <rect x="50" y="100" width="210" height="80" class="redbox"/>
+  <text x="155" y="128" text-anchor="middle" class="h">LLM</text>
+  <text x="155" y="148" text-anchor="middle" class="small">may hallucinate</text>
+  <text x="155" y="166" text-anchor="middle" class="small">may obey injected text</text>
+  <rect x="50" y="205" width="210" height="105" class="redbox"/>
+  <text x="155" y="232" text-anchor="middle" class="h">Tool call JSON</text>
+  <text x="155" y="252" text-anchor="middle" class="small">name + arguments</text>
+  <text x="155" y="270" text-anchor="middle" class="small">no shell string</text>
+  <text x="155" y="288" text-anchor="middle" class="small">no privilege</text>
+  <rect x="50" y="335" width="210" height="80" class="box"/>
+  <text x="155" y="362" text-anchor="middle" class="h">Approval gate</text>
+  <text x="155" y="382" text-anchor="middle" class="small">dry-run needs none</text>
+  <text x="155" y="400" text-anchor="middle" class="small">apply needs user y/N/a</text>
+  <text x="155" y="455" text-anchor="middle" class="small">The model never receives a shell.</text>
+
+  <rect x="315" y="55" width="330" height="460" class="validated"/>
+  <text x="480" y="80" text-anchor="middle" class="h">Server validation (unprivileged)</text>
+  <rect x="335" y="100" width="290" height="70" class="amberbox"/>
+  <text x="480" y="126" text-anchor="middle" class="h">security.py</text>
+  <text x="480" y="146" text-anchor="middle" class="small">regex, unit/action, value bounds</text>
+  <text x="480" y="162" text-anchor="middle" class="small">path confinement, redaction</text>
+  <rect x="335" y="188" width="290" height="70" class="amberbox"/>
+  <text x="480" y="214" text-anchor="middle" class="h">policy.toml</text>
+  <text x="480" y="234" text-anchor="middle" class="small">allowed units/actions/parameters</text>
+  <text x="480" y="250" text-anchor="middle" class="small">file roots, network hosts, write gate</text>
+  <rect x="335" y="276" width="290" height="70" class="amberbox"/>
+  <text x="480" y="302" text-anchor="middle" class="h">runner.py</text>
+  <text x="480" y="322" text-anchor="middle" class="small">fixed argv, no shell</text>
+  <text x="480" y="338" text-anchor="middle" class="small">timeout, process-group kill</text>
+  <rect x="335" y="364" width="290" height="70" class="amberbox"/>
+  <text x="480" y="390" text-anchor="middle" class="h">runtime.py + audit.py</text>
+  <text x="480" y="410" text-anchor="middle" class="small">write gate, throttle, JSONL</text>
+  <text x="480" y="426" text-anchor="middle" class="small">redacted arguments</text>
+  <text x="480" y="470" text-anchor="middle" class="small">A second validator exists in the shell helper.</text>
+
+  <rect x="685" y="55" width="285" height="460" class="privileged"/>
+  <text x="827" y="80" text-anchor="middle" class="h">Root-owned helper</text>
+  <rect x="705" y="100" width="245" height="70" class="greenbox"/>
+  <text x="827" y="126" text-anchor="middle" class="h">sudoers Cmnd_Alias</text>
+  <text x="827" y="146" text-anchor="middle" class="small">two absolute paths only</text>
+  <text x="827" y="162" text-anchor="middle" class="small">NOPASSWD, no SETENV</text>
+  <rect x="705" y="188" width="245" height="70" class="greenbox"/>
+  <text x="827" y="214" text-anchor="middle" class="h">shell helper</text>
+  <text x="827" y="234" text-anchor="middle" class="small">re-validates unit/value</text>
+  <text x="827" y="250" text-anchor="middle" class="small">allow-list file check</text>
+  <rect x="705" y="276" width="245" height="70" class="greenbox"/>
+  <text x="827" y="302" text-anchor="middle" class="h">backup + atomic write</text>
+  <text x="827" y="322" text-anchor="middle" class="small">timestamped, absent markers</text>
+  <text x="827" y="338" text-anchor="middle" class="small">flock, nginx -t</text>
+  <rect x="705" y="364" width="245" height="70" class="greenbox"/>
+  <text x="827" y="390" text-anchor="middle" class="h">rollback</text>
+  <text x="827" y="410" text-anchor="middle" class="small">restore on test/reload failure</text>
+  <text x="827" y="426" text-anchor="middle" class="small">safety backup on rollback</text>
+  <text x="827" y="470" text-anchor="middle" class="small">Finally: systemd / nginx / kernel enforce.</text>
+
+  <line x1="260" y1="260" x2="330" y2="260" class="arrow"/>
+  <text x="295" y="248" text-anchor="middle" class="small">validated</text>
+  <line x1="625" y1="260" x2="700" y2="260" class="arrow"/>
+  <text x="662" y="248" text-anchor="middle" class="small">sudo -n</text>
+</svg>

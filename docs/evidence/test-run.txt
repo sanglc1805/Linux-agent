@@ -1,0 +1,73 @@
+test_auto_approve (tests.test_agent_policy.ApprovalPolicyTests.test_auto_approve) ... ok
+test_read_only_tool_never_needs_approval (tests.test_agent_policy.ApprovalPolicyTests.test_read_only_tool_never_needs_approval) ... ok
+test_unknown_mutating_tool_requires_approval (tests.test_agent_policy.ApprovalPolicyTests.test_unknown_mutating_tool_requires_approval) ... ok
+test_write_tool_dry_run_needs_no_approval (tests.test_agent_policy.ApprovalPolicyTests.test_write_tool_dry_run_needs_no_approval) ... ok
+test_tools_resources_and_prompts (tests.test_mcp_server.MCPServerIntegrationTests.test_tools_resources_and_prompts) ... [linux-agent] policy=/home/lcsang/linux-agent/config/policy.toml write=OFF units=nginx transport=stdio
+[11/14/26 22:26:31] INFO     Processing request of type            server.py:733
+                             ListToolsRequest                                   
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             ListResourcesRequest                               
+                    INFO     Processing request of type            server.py:733
+                             ReadResourceRequest                                
+                    INFO     Processing request of type            server.py:733
+                             ReadResourceRequest                                
+                    INFO     Processing request of type            server.py:733
+                             ListPromptsRequest                                 
+                    INFO     Processing request of type            server.py:733
+                             GetPromptRequest                                   
+ok
+test_write_path_with_unprivileged_fake_helper (tests.test_mcp_server.MCPServerIntegrationTests.test_write_path_with_unprivileged_fake_helper)
+Exercise apply -> verify -> rollback without touching the real host. ... [linux-agent] policy=/home/lcsang/linux-agent/config/policy.toml write=ON units=nginx transport=stdio
+[11/14/26 22:26:32] INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             ListToolsRequest                                   
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+                    INFO     Processing request of type            server.py:733
+                             CallToolRequest                                    
+ok
+test_dry_run_does_not_write (tests.test_nginx_script.NginxHelperTests.test_dry_run_does_not_write) ... ok
+test_failed_config_test_removes_new_file (tests.test_nginx_script.NginxHelperTests.test_failed_config_test_removes_new_file) ... ok
+test_failed_config_test_restores_existing_file (tests.test_nginx_script.NginxHelperTests.test_failed_config_test_restores_existing_file) ... ok
+test_invalid_value_is_rejected (tests.test_nginx_script.NginxHelperTests.test_invalid_value_is_rejected) ... ok
+test_list_and_get (tests.test_nginx_script.NginxHelperTests.test_list_and_get) ... ok
+test_rollback (tests.test_nginx_script.NginxHelperTests.test_rollback) ... ok
+test_set_http_parameter_and_backup (tests.test_nginx_script.NginxHelperTests.test_set_http_parameter_and_backup) ... ok
+test_set_main_and_events_parameters (tests.test_nginx_script.NginxHelperTests.test_set_main_and_events_parameters) ... ok
+test_unknown_parameter (tests.test_nginx_script.NginxHelperTests.test_unknown_parameter) ... ok
+test_allowed_action (tests.test_nginx_script.ServiceHelperTests.test_allowed_action) ... ok
+test_disallowed_unit (tests.test_nginx_script.ServiceHelperTests.test_disallowed_unit) ... ok
+test_invalid_action_and_unit (tests.test_nginx_script.ServiceHelperTests.test_invalid_action_and_unit) ... ok
+test_service_suffix_is_normalized (tests.test_nginx_script.ServiceHelperTests.test_service_suffix_is_normalized) ... ok
+test_default_policy (tests.test_security.ConfigTests.test_default_policy) ... ok
+test_env_can_enable_write (tests.test_security.ConfigTests.test_env_can_enable_write) ... ok
+test_parameter_validation (tests.test_security.ConfigTests.test_parameter_validation) ... ok
+test_unknown_parameter_rejected (tests.test_security.ConfigTests.test_unknown_parameter_rejected) ... ok
+test_confines_to_root (tests.test_security.PathTests.test_confines_to_root) ... ok
+test_redacts_assignments_and_keys (tests.test_security.RedactionTests.test_redacts_assignments_and_keys) ... ok
+test_truncate_is_byte_bounded (tests.test_security.RedactionTests.test_truncate_is_byte_bounded) ... ok
+test_accepts_common_units (tests.test_security.UnitValidationTests.test_accepts_common_units) ... ok
+test_action_validation (tests.test_security.UnitValidationTests.test_action_validation) ... ok
+test_rejects_injection (tests.test_security.UnitValidationTests.test_rejects_injection) ... ok
+
+----------------------------------------------------------------------
+Ran 29 tests in 4.394s
+
+OK

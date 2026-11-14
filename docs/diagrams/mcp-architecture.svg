@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="460" viewBox="0 0 1000 460">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      .title { font: 700 20px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .h { font: 700 16px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .t { font: 13px "DejaVu Sans", sans-serif; fill: #334155; }
+      .small { font: 12px "DejaVu Sans", sans-serif; fill: #475569; }
+      .box { fill: #f8fafc; stroke: #475569; stroke-width: 1.5; rx: 10; }
+      .accent { fill: #e0f2fe; stroke: #0369a1; stroke-width: 1.5; rx: 10; }
+      .warn { fill: #fef3c7; stroke: #b45309; stroke-width: 1.5; rx: 10; }
+      .arrow { stroke: #334155; stroke-width: 1.8; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1000" height="460" fill="#ffffff"/>
+  <text x="500" y="30" text-anchor="middle" class="title">MCP host / client / server architecture</text>
+
+  <rect x="30" y="60" width="300" height="330" class="box" stroke-dasharray="6 4"/>
+  <text x="180" y="88" text-anchor="middle" class="h">MCP Host (agent)</text>
+  <rect x="55" y="110" width="250" height="95" class="accent"/>
+  <text x="180" y="138" text-anchor="middle" class="h">LLM</text>
+  <text x="180" y="160" text-anchor="middle" class="small">Groq / function calling</text>
+  <text x="180" y="180" text-anchor="middle" class="small">plans and chooses tools</text>
+  <rect x="55" y="230" width="250" height="95" class="accent"/>
+  <text x="180" y="258" text-anchor="middle" class="h">MCP Client</text>
+  <text x="180" y="280" text-anchor="middle" class="small">tools/list, tools/call</text>
+  <text x="180" y="300" text-anchor="middle" class="small">resources, prompts</text>
+  <text x="180" y="345" text-anchor="middle" class="small">approval + session log</text>
+
+  <rect x="380" y="60" width="250" height="330" class="warn"/>
+  <text x="505" y="88" text-anchor="middle" class="h">MCP Server</text>
+  <text x="505" y="112" text-anchor="middle" class="small">FastMCP over JSON-RPC</text>
+  <rect x="405" y="130" width="200" height="48" class="box"/>
+  <text x="505" y="159" text-anchor="middle" class="t">Tools (23, typed)</text>
+  <rect x="405" y="190" width="200" height="48" class="box"/>
+  <text x="505" y="219" text-anchor="middle" class="t">Resources (4)</text>
+  <rect x="405" y="250" width="200" height="48" class="box"/>
+  <text x="505" y="279" text-anchor="middle" class="t">Prompts (3)</text>
+  <text x="505" y="330" text-anchor="middle" class="small">validation + allow-lists</text>
+  <text x="505" y="350" text-anchor="middle" class="small">write gate + audit</text>
+
+  <rect x="680" y="60" width="290" height="155" class="box"/>
+  <text x="825" y="88" text-anchor="middle" class="h">Linux host</text>
+  <text x="825" y="114" text-anchor="middle" class="small">systemd / journald</text>
+  <text x="825" y="136" text-anchor="middle" class="small">nginx, Docker, /proc</text>
+  <text x="825" y="158" text-anchor="middle" class="small">filesystem, network</text>
+  <text x="825" y="184" text-anchor="middle" class="small">read-only tools + helpers</text>
+
+  <rect x="680" y="240" width="290" height="150" class="box"/>
+  <text x="825" y="268" text-anchor="middle" class="h">Trust / evidence</text>
+  <text x="825" y="294" text-anchor="middle" class="small">policy.toml allow-lists</text>
+  <text x="825" y="316" text-anchor="middle" class="small">sudoers (two helpers)</text>
+  <text x="825" y="338" text-anchor="middle" class="small">JSONL audit</text>
+  <text x="825" y="360" text-anchor="middle" class="small">timestamped backups</text>
+
+  <line x1="305" y1="278" x2="375" y2="278" class="arrow"/>
+  <text x="340" y="266" text-anchor="middle" class="small">JSON-RPC</text>
+  <text x="340" y="300" text-anchor="middle" class="small">stdio / HTTP</text>
+
+  <line x1="630" y1="150" x2="675" y2="150" class="arrow"/>
+  <text x="652" y="138" text-anchor="middle" class="small">tools</text>
+
+  <line x1="630" y1="315" x2="675" y2="315" class="arrow"/>
+  <text x="652" y="303" text-anchor="middle" class="small">audit</text>
+</svg>

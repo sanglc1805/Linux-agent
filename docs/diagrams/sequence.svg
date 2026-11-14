@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="720" viewBox="0 0 1000 720">
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1e293b"/>
+    </marker>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#0369a1"/>
+    </marker>
+    <style>
+      .title { font: 700 19px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .h { font: 700 13px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .t { font: 11px "DejaVu Sans", sans-serif; fill: #334155; }
+      .small { font: 10.5px "DejaVu Sans", sans-serif; fill: #475569; }
+      .life { stroke: #94a3b8; stroke-width: 1; stroke-dasharray: 4 5; }
+      .msg { stroke: #1e293b; stroke-width: 1.5; fill: none; marker-end: url(#a); }
+      .ret { stroke: #0369a1; stroke-width: 1.4; fill: none; marker-end: url(#ar); stroke-dasharray: 6 3; }
+      .box { fill: #f8fafc; stroke: #475569; stroke-width: 1.2; rx: 7; }
+      .blue { fill: #e0f2fe; stroke: #0369a1; stroke-width: 1.2; rx: 7; }
+      .amber { fill: #fef3c7; stroke: #b45309; stroke-width: 1.2; rx: 7; }
+      .green { fill: #dcfce7; stroke: #15803d; stroke-width: 1.2; rx: 7; }
+      .alt { fill: #f8fafc; stroke: #64748b; stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="1000" height="720" fill="#ffffff"/>
+  <text x="500" y="28" text-anchor="middle" class="title">Sequence: safe nginx configuration change</text>
+
+  <rect x="35" y="48" width="120" height="34" class="blue"/>
+  <text x="95" y="69" text-anchor="middle" class="h">User</text>
+  <rect x="215" y="48" width="120" height="34" class="blue"/>
+  <text x="275" y="69" text-anchor="middle" class="h">Agent</text>
+  <rect x="395" y="48" width="120" height="34" class="amber"/>
+  <text x="455" y="69" text-anchor="middle" class="h">MCP server</text>
+  <rect x="575" y="48" width="140" height="34" class="amber"/>
+  <text x="645" y="69" text-anchor="middle" class="h">nginx_param.sh</text>
+  <rect x="785" y="48" width="160" height="34" class="green"/>
+  <text x="865" y="69" text-anchor="middle" class="h">nginx / systemd</text>
+
+  <line x1="95" y1="82" x2="95" y2="685" class="life"/>
+  <line x1="275" y1="82" x2="275" y2="685" class="life"/>
+  <line x1="455" y1="82" x2="455" y2="685" class="life"/>
+  <line x1="645" y1="82" x2="645" y2="685" class="life"/>
+  <line x1="865" y1="82" x2="865" y2="685" class="life"/>
+
+  <line x1="95" y1="115" x2="270" y2="115" class="msg"/>
+  <text x="182" y="107" text-anchor="middle" class="t">set client_max_body_size 20m</text>
+
+  <line x1="275" y1="145" x2="450" y2="145" class="msg"/>
+  <text x="362" y="137" text-anchor="middle" class="t">nginx_list_parameters()</text>
+  <line x1="455" y1="170" x2="280" y2="170" class="ret"/>
+  <text x="368" y="162" text-anchor="middle" class="t">current values</text>
+
+  <line x1="275" y1="198" x2="450" y2="198" class="msg"/>
+  <text x="362" y="190" text-anchor="middle" class="t">nginx_set_parameter(20m, dry_run=true)</text>
+  <line x1="455" y1="223" x2="640" y2="223" class="msg"/>
+  <text x="548" y="215" text-anchor="middle" class="t">set ... --dry-run</text>
+  <line x1="645" y1="248" x2="460" y2="248" class="ret"/>
+  <text x="552" y="240" text-anchor="middle" class="t">unified diff (no write)</text>
+  <line x1="455" y1="273" x2="280" y2="273" class="ret"/>
+  <text x="368" y="265" text-anchor="middle" class="t">diff</text>
+
+  <line x1="275" y1="301" x2="90" y2="301" class="msg"/>
+  <text x="183" y="293" text-anchor="middle" class="t">explain diff, request approval</text>
+  <line x1="95" y1="326" x2="270" y2="326" class="msg"/>
+  <text x="183" y="318" text-anchor="middle" class="t">approve (y)</text>
+
+  <line x1="275" y1="355" x2="450" y2="355" class="msg"/>
+  <text x="362" y="347" text-anchor="middle" class="t">nginx_set_parameter(20m, dry_run=false, reload=true)</text>
+  <line x1="455" y1="380" x2="640" y2="380" class="msg"/>
+  <text x="548" y="372" text-anchor="middle" class="t">sudo -n helper set ... --reload</text>
+
+  <rect x="555" y="398" width="390" height="170" class="alt" rx="6"/>
+  <text x="565" y="414" class="small">alt</text>
+  <text x="585" y="414" class="small">[nginx -t fails]</text>
+  <line x1="575" y1="428" x2="670" y2="428" class="msg"/>
+  <text x="622" y="420" text-anchor="middle" class="small">backup</text>
+  <line x1="640" y1="450" x2="850" y2="450" class="msg"/>
+  <text x="745" y="442" text-anchor="middle" class="small">nginx -t</text>
+  <line x1="645" y1="478" x2="455" y2="478" class="ret"/>
+  <text x="550" y="470" text-anchor="middle" class="small">error + restored files</text>
+
+  <text x="565" y="505" class="small">else</text>
+  <text x="585" y="505" class="small">[test passes]</text>
+  <line x1="640" y1="520" x2="850" y2="520" class="msg"/>
+  <text x="745" y="512" text-anchor="middle" class="small">systemctl reload nginx</text>
+  <line x1="645" y1="548" x2="455" y2="548" class="ret"/>
+  <text x="550" y="540" text-anchor="middle" class="small">success + backup id</text>
+
+  <line x1="455" y1="590" x2="280" y2="590" class="ret"/>
+  <text x="368" y="582" text-anchor="middle" class="t">result</text>
+  <line x1="275" y1="617" x2="450" y2="617" class="msg"/>
+  <text x="362" y="609" text-anchor="middle" class="t">nginx_get_parameter(20m)</text>
+  <line x1="455" y1="642" x2="280" y2="642" class="ret"/>
+  <text x="368" y="634" text-anchor="middle" class="t">20m (verified)</text>
+  <line x1="275" y1="669" x2="90" y2="669" class="ret"/>
+  <text x="183" y="661" text-anchor="middle" class="t">verified answer</text>
+</svg>

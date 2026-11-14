@@ -1,0 +1,97 @@
+# Linux Agent - runtime policy
+#
+# This file is the single source of truth for what the MCP server is allowed to
+# read or change. Keep it in sync with /etc/linux-agent/allowed-units on the
+# machine where the privileged helpers are installed.
+
+[server]
+name = "linux-agent"
+instructions = """
+Linux Agent exposes read-only diagnostics and a small, explicitly allow-listed
+set of privileged operations on a Linux host. Always inspect before changing.
+Never claim a change succeeded unless a tool result says it did.
+"""
+
+[security]
+# Write tools are disabled unless this is true. Can be overridden at runtime by
+# LINUX_AGENT_ALLOW_WRITE=1. Read-only and dry-run operations still work.
+allow_write = false
+audit_log = "logs/audit.jsonl"
+max_output_bytes = 24000
+read_timeout_seconds = 20
+write_timeout_seconds = 60
+min_write_interval_seconds = 1.0
+
+[units]
+# Units that may be started/stopped/restarted/reloaded. Read-only inspection is
+# allowed for any syntactically valid unit name.
+allowed = ["nginx"]
+actions = ["start", "stop", "restart", "reload"]
+
+[helpers]
+# Privileged, root-owned copies installed by scripts/install_privileged.sh.
+dir = "/usr/local/libexec/linux-agent"
+nginx = "nginx_param.sh"
+service = "service_ctl.sh"
+use_sudo = true
+
+[nginx]
+unit = "nginx"
+# Used only when helpers.prefer_repo_copy is true (development without install).
+repo_copy = "scripts/nginx_param.sh"
+prefer_installed = true
+
+[nginx.parameters.worker_processes]
+context = "main"
+pattern = "^(auto|[1-9][0-9]?)$"
+description = "Number of nginx worker processes (auto or 1-64)."
+
+[nginx.parameters.worker_connections]
+context = "events"
+pattern = "^[1-9][0-9]{0,5}$"
+description = "Maximum simultaneous connections per worker (128-65535)."
+
+[nginx.parameters.client_max_body_size]
+context = "http"
+pattern = "^(0|[1-9][0-9]{0,4}[kKmMgG]?)$"
+description = "Maximum request body size, for example 1m or 20m (0 = unlimited)."
+
+[nginx.parameters.keepalive_timeout]
+context = "http"
+pattern = "^[0-9]{1,4}$"
+description = "Keep-alive timeout in seconds (0-600)."
+
+[nginx.parameters.client_body_timeout]
+context = "http"
+pattern = "^[0-9]{1,3}$"
+description = "Client body read timeout in seconds (0-300)."
+
+[nginx.parameters.send_timeout]
+context = "http"
+pattern = "^[0-9]{1,3}$"
+description = "Response send timeout in seconds (0-300)."
+
+[nginx.parameters.gzip]
+context = "http"
+pattern = "^(on|off)$"
+description = "Enable or disable gzip compression."
+
+[nginx.parameters.server_tokens]
+context = "http"
+pattern = "^(on|off)$"
+description = "Expose the nginx version in responses and error pages."
+
+[files]
+# read_config may only read files below these directories.
+allowed_roots = ["/etc/nginx", "config", "logs"]
+max_lines = 400
+
+[network]
+# http_probe may only contact these hosts.
+allowed_hosts = ["127.0.0.1", "localhost", "::1"]
+
+[agent]
+model = "openai/gpt-oss-20b"
+max_steps = 8
+max_tool_output_chars = 12000
+temperature = 0.1

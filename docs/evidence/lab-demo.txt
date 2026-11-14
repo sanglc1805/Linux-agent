@@ -1,0 +1,95 @@
+=== Linux Agent isolated lab ===
+Lab directory: /tmp/opencode/linux-agent-lab.GpYTWX
+Initial nginx.conf:
+  # Lab nginx.conf - not the real /etc/nginx/nginx.conf
+  user www-data;
+  worker_processes auto;
+  events {
+      worker_connections 768;
+  }
+  http {
+      include /etc/nginx/mime.types;
+      include /etc/nginx/conf.d/*.conf;
+  }
+
+--- 1. Current managed parameters (read-only) ---
+PARAMETER                CONTEXT VALUE ALLOWED
+worker_processes         main    auto  auto or 1-64
+worker_connections       events  768   128-65535
+client_max_body_size     http    unset 0 or size (k/m/g), max 10g
+keepalive_timeout        http    unset 0-600 seconds
+client_body_timeout      http    unset 0-300 seconds
+send_timeout             http    unset 0-300 seconds
+gzip                     http    unset on or off
+server_tokens            http    unset on or off
+
+--- 2. Dry run: client_max_body_size 20m (no write) ---
+DRY RUN: client_max_body_size = 20m (context: http)
+Reload requested: no
+
+DRY RUN: client_max_body_size: (unset) -> 20m (http)
+--- /tmp/opencode/linux-agent-lab.GpYTWX/etc/conf.d/99-linux-agent.conf (current: absent)
++++ /tmp/opencode/linux-agent-lab.GpYTWX/etc/conf.d/99-linux-agent.conf (proposed)
+@@ -0,0 +1,3 @@
++# Managed by linux-agent - manual edits will be overwritten.
++# Backups are stored in /tmp/opencode/linux-agent-lab.GpYTWX/backups.
++client_max_body_size 20m;
+
+--- 3. Apply: client_max_body_size 20m (validated + backed up) ---
+APPLIED: client_max_body_size = 20m (context: http)
+Reload requested: no
+
+applied client_max_body_size (unset) -> 20m (http) backup=20261114T152619Z-67015 reload=no
+Config test: passed
+  nginx: configuration file test is successful (lab)
+Backup: /tmp/opencode/linux-agent-lab.GpYTWX/backups/20261114T152619Z-67015
+
+--- 4. Verify the new value ---
+Parameter: client_max_body_size
+Context: http
+Description: Maximum request body size, for example 1m or 20m (0 = unlimited).
+Value: 20m
+
+--- 5. Backups ---
+id: 20261114T152619Z-67015
+  action=set
+  parameter=client_max_body_size
+  old=(unset)
+  new=20m
+  created=2026-11-14T15:26:19Z
+  host=lcsang-G3-3590
+
+--- 6. Roll back 20261114T152619Z-67015 ---
+ROLLED BACK: 20261114T152619Z-67015
+
+rolled back to 20261114T152619Z-67015 (safety backup=20261114T152620Z-67103 reload=no)
+Config test: passed
+  nginx: configuration file test is successful (lab)
+
+--- 7. Verify the value after rollback ---
+Parameter: client_max_body_size
+Context: http
+Description: Maximum request body size, for example 1m or 20m (0 = unlimited).
+Value: unset
+
+--- 8. Server audit tail ---
+  2026-11-14T15:26:19.929+00:00 nginx_set_parameter    ok=True 87ms
+  2026-11-14T15:26:19.949+00:00 nginx_get_parameter    ok=True 14ms
+  2026-11-14T15:26:19.974+00:00 nginx_list_backups     ok=True 18ms
+  2026-11-14T15:26:21.010+00:00 nginx_rollback         ok=True 1030ms
+  2026-11-14T15:26:21.044+00:00 nginx_get_parameter    ok=True 24ms
+
+Final lab nginx.conf and managed drop-in:
+  # Lab nginx.conf - not the real /etc/nginx/nginx.conf
+  user www-data;
+  worker_processes auto;
+  events {
+      worker_connections 768;
+  }
+  http {
+      include /etc/nginx/mime.types;
+      include /etc/nginx/conf.d/*.conf;
+  }
+  (managed drop-in absent, as expected after rollback)
+
+Lab removed (set KEEP=1 to keep artifacts).

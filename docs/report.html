@@ -1,0 +1,2397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linux Agent — Final Project Report</title>
+<style>
+@page { size: A4; margin: 18mm 16mm 20mm 16mm; }
+html { font-size: 10.5pt; }
+body {
+  font-family: "DejaVu Serif", "Noto Serif", Georgia, serif;
+  color: #1e293b; line-height: 1.55; margin: 0;
+  text-align: justify; hyphens: auto;
+}
+h1, h2, h3, h4 { font-family: "DejaVu Sans", "Noto Sans", Arial, sans-serif; color: #0f172a; line-height: 1.25; }
+h1 { font-size: 25pt; margin: 0.2em 0 0.35em; text-align: center; break-before: page; }
+h2 {
+  font-size: 16pt; color: #075985; margin: 0 0 0.7em;
+  padding-bottom: 0.2em; border-bottom: 1.5px solid #bae6fd;
+  break-before: auto;
+}
+#declaration-of-authorship, #abstract, #table-of-contents,
+#list-of-figures, #list-of-tables, #list-of-abbreviations { break-before: page; }
+h3 { font-size: 12.5pt; color: #0c4a6e; margin: 1.2em 0 0.35em; break-after: avoid; }
+h4 { font-size: 11pt; margin: 1em 0 0.3em; break-after: avoid; }
+p { margin: 0.45em 0 0.7em; orphans: 3; widows: 3; }
+ul, ol { margin: 0.35em 0 0.8em; padding-left: 1.4em; }
+li { margin: 0.18em 0; }
+a { color: #0369a1; text-decoration: none; }
+code {
+  font-family: "DejaVu Sans Mono", "Noto Sans Mono", Consolas, monospace;
+  font-size: 0.86em; background: #f1f5f9; padding: 0.08em 0.28em; border-radius: 3px;
+}
+pre {
+  font-family: "DejaVu Sans Mono", "Noto Sans Mono", Consolas, monospace;
+  font-size: 8.2pt; line-height: 1.38; background: #f8fafc;
+  border: 1px solid #e2e8f0; border-left: 3px solid #0284c7;
+  border-radius: 4px; padding: 0.7em 0.85em; margin: 0.6em 0 0.9em;
+  white-space: pre-wrap; overflow-wrap: anywhere; break-inside: avoid;
+}
+pre code { background: transparent; padding: 0; font-size: inherit; }
+table {
+  width: 100%; border-collapse: collapse; font-size: 8.6pt;
+  font-family: "DejaVu Sans", "Noto Sans", Arial, sans-serif;
+  margin: 0.6em 0 1em; break-inside: auto;
+}
+thead { display: table-header-group; }
+tr { break-inside: avoid; }
+th { background: #e0f2fe; color: #0c4a6e; text-align: left; font-weight: 700; }
+th, td { border: 1px solid #cbd5e1; padding: 3.5px 5px; vertical-align: top; }
+blockquote {
+  margin: 0.7em 0; padding: 0.55em 0.9em; background: #f0f9ff;
+  border-left: 4px solid #0284c7; color: #334155;
+}
+img { max-width: 100%; height: auto; display: block; margin: 0.7em auto 0.4em; }
+.cover {
+  text-align: center;
+  padding-top: 52mm;
+  break-after: page;
+}
+.cover h1 { margin: 0.15em 0 0.3em; break-before: auto; }
+.cover h2 { border: 0; color: #334155; font-size: 15pt; break-before: auto; margin-top: 1.6em; }
+.cover h3 { font-size: 12pt; color: #475569; break-before: auto; }
+.cover h4 { font-size: 10.5pt; color: #64748b; font-weight: 500; break-before: auto; }
+.cover table { width: 76%; margin: 1.4em auto 0.8em; font-size: 9pt; text-align: left; }
+hr { border: 0; border-top: 1px solid #cbd5e1; margin: 1.2em 0; }
+</style>
+</head>
+<body>
+<div class="cover"><h1 id="university-of-information-technology">UNIVERSITY OF INFORMATION TECHNOLOGY</h1>
+<h3 id="vietnam-national-university-ho-chi-minh-city">VIETNAM NATIONAL UNIVERSITY HO CHI MINH CITY</h3>
+<h4 id="faculty-of-computer-networks-and-communications">Faculty of Computer Networks and Communications</h4>
+<p><br><br></p>
+<h1 id="final-project-report">FINAL PROJECT REPORT</h1>
+<h2 id="develop-an-agentic-ai-system-with-mcp-based-tool-use-in-linux">Develop an Agentic AI System with MCP-Based Tool Use in Linux</h2>
+<p><br></p>
+<p><strong>Course:</strong> Linux and Open-Source Software (LINUX OSS 2026)</p>
+<p><strong>Project direction:</strong> Agentic AI, MCP, Tool Use and Linux Automation</p>
+<p><br><br></p>
+<table>
+<thead>
+<tr>
+<th>Group member</th>
+<th>Student ID</th>
+<th>Contribution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[Full name]</td>
+<td>[Student ID]</td>
+<td>MCP server, tools, security</td>
+</tr>
+<tr>
+<td>[Full name]</td>
+<td>[Student ID]</td>
+<td>Agent, demo, evaluation</td>
+</tr>
+<tr>
+<td>[Full name]</td>
+<td>[Student ID]</td>
+<td>Report, slides, testing</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Lecturer:</strong> [Lecturer name]</p>
+<p><strong>Date:</strong> November 2026</p>
+</div>
+<h2 id="declaration-of-authorship">Declaration of Authorship</h2>
+<p>We declare that this report and the accompanying source code are our own work. External
+ideas, specifications and software are acknowledged in the references. The project was
+tested on a real Ubuntu 26.04 host and in an isolated laboratory configuration. We did not
+use another group's code, and we did not hide failed experiments: the limitations section
+records what the system does not solve.</p>
+<p>Signed: ____________________  Date: ____________</p>
+<h2 id="abstract">Abstract</h2>
+<p>Linux administration is repetitive, stateful and risky: an operator has to inspect
+services, read logs, understand configuration contexts, change one value, validate the
+result and be ready to roll back. Large language models (LLMs) can explain such work, but
+a chat window cannot safely operate a machine. This project builds <strong>Linux Agent</strong>, an
+agentic system that connects a Groq-hosted LLM to an Ubuntu host through the <strong>Model
+Context Protocol (MCP)</strong>. The system implements an MCP server with 23 typed tools, four
+resources/resource templates and three prompts; a small Plan–Act–Observe agent loop; a
+human approval gate; a JSONL audit trail; and two root-owned helper scripts that perform
+allow-listed systemd actions and safe nginx configuration changes.</p>
+<p>The central design claim is that the language model should be treated as untrusted input.
+The model never receives a shell. The server validates every argument, the shell helpers
+validate again, and the operating system enforces a narrow sudoers rule. Configuration
+changes are dry-run by default, create a timestamped backup, run <code>nginx -t</code>, and restore
+the previous files automatically if validation or reload fails. The agent asks for
+explicit approval before any non-dry-run change and records every step.</p>
+<p>The implementation is evaluated with 29 automated tests, an end-to-end MCP stdio test, an
+isolated write/rollback laboratory, and a real-host demonstration. All tests pass. On the
+test host, read-only tool calls take roughly 6–65 ms and a complete LLM turn takes about
+2.6 s including server startup. The laboratory applies a <code>client_max_body_size</code> change,
+verifies it, creates a backup, and rolls it back without root. The report also analyses
+residual risks: prompt injection, approval fatigue, HTTP authentication, audit integrity
+and the limits of syntax-only validation. The result is a reproducible teaching platform
+for agentic Linux automation, not a production control plane.</p>
+<p><strong>Keywords:</strong> agentic AI, Model Context Protocol, MCP, Linux, systemd, nginx, tool use,
+human-in-the-loop, least privilege, audit.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#1-introduction">Introduction</a></li>
+<li><a href="#2-background-and-related-work">Background and Related Work</a></li>
+<li><a href="#3-requirements-and-analysis">Requirements and Analysis</a></li>
+<li><a href="#4-system-design">System Design</a></li>
+<li><a href="#5-implementation">Implementation</a></li>
+<li><a href="#6-testing-and-evaluation">Testing and Evaluation</a></li>
+<li><a href="#7-discussion-limitations-and-future-work">Discussion, Limitations and Future Work</a></li>
+<li><a href="#8-conclusion">Conclusion</a></li>
+<li><a href="#9-references">References</a></li>
+<li><a href="#10-appendices">Appendices</a></li>
+</ol>
+<h2 id="list-of-figures">List of Figures</h2>
+<ul>
+<li>Figure 1. MCP host/client/server architecture.</li>
+<li>Figure 2. Linux Agent component architecture.</li>
+<li>Figure 3. Sequence diagram for a safe nginx configuration change.</li>
+<li>Figure 4. Trust boundaries and validation layers.</li>
+<li>Figure 5. Agent Plan–Act–Observe loop.</li>
+<li>Figure 6. Deployment topologies.</li>
+</ul>
+<h2 id="list-of-tables">List of Tables</h2>
+<ul>
+<li>Table 1. Functional requirements.</li>
+<li>Table 2. Non-functional requirements.</li>
+<li>Table 3. Risk analysis.</li>
+<li>Table 4. Requirement traceability.</li>
+<li>Table 5. MCP tool catalog.</li>
+<li>Table 6. Policy sections.</li>
+<li>Table 7. Test matrix and results.</li>
+<li>Table 8. Performance measurements.</li>
+<li>Table 9. Residual risks and mitigations.</li>
+</ul>
+<h2 id="list-of-abbreviations">List of Abbreviations</h2>
+<table>
+<thead>
+<tr>
+<th>Abbreviation</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI</td>
+<td>Artificial Intelligence</td>
+</tr>
+<tr>
+<td>API</td>
+<td>Application Programming Interface</td>
+</tr>
+<tr>
+<td>CLI</td>
+<td>Command-Line Interface</td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td>Hypertext Transfer Protocol</td>
+</tr>
+<tr>
+<td>JSON-RPC</td>
+<td>JSON Remote Procedure Call</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td>Large Language Model</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol</td>
+</tr>
+<tr>
+<td>NFR</td>
+<td>Non-functional Requirement</td>
+</tr>
+<tr>
+<td>OWASP</td>
+<td>Open Worldwide Application Security Project</td>
+</tr>
+<tr>
+<td>RBAC</td>
+<td>Role-Based Access Control</td>
+</tr>
+<tr>
+<td>stdio</td>
+<td>Standard input/output</td>
+</tr>
+<tr>
+<td>TOML</td>
+<td>Tom's Obvious Minimal Language</td>
+</tr>
+</tbody>
+</table>
+<h1 id="1-introduction">1. Introduction</h1>
+<h2 id="11-context-and-motivation">1.1 Context and motivation</h2>
+<p>A Linux server exposes a large, stateful surface: systemd units, journal logs, nginx
+configuration files, HTTP endpoints, packages, containers and network sockets. A routine
+task such as "increase the maximum upload size" is not a single command. The operator must
+find the effective configuration, understand whether the directive belongs to the <code>main</code>,
+<code>events</code>, <code>http</code>, <code>server</code> or <code>location</code> context, change it without breaking the file,
+validate it with <code>nginx -t</code>, reload the service, verify the result, and keep a rollback
+path. Copying commands from a tutorial ignores most of these steps.</p>
+<p>Agentic AI offers a different interface. Instead of asking an operator to translate intent
+into commands, an LLM can plan a sequence of tool calls, observe the results and revise the
+plan. The missing piece is a controlled tool boundary. Giving an LLM an unrestricted shell
+is both unsafe and unreproducible. The <strong>Model Context Protocol (MCP)</strong> standardises that
+boundary: a host (the agent) connects to a server, discovers typed tools, calls them with
+JSON arguments and receives structured results.</p>
+<p>This project asks a practical question:</p>
+<blockquote>
+<p>Can a small, open, auditable MCP server let an LLM perform useful Linux administration
+while keeping the human in control and the blast radius small?</p>
+</blockquote>
+<p>The answer is a working system, not a slideware architecture. Linux Agent runs on a real
+Ubuntu host, reads real systemd and nginx state, and can change an allow-listed nginx
+parameter through a root-owned helper after explicit approval.</p>
+<h2 id="12-problem-statement">1.2 Problem statement</h2>
+<p>The project addresses four problems:</p>
+<ol>
+<li><strong>Tool integration.</strong> An LLM needs typed, discoverable tools with clear descriptions
+   and machine-readable schemas. Ad-hoc shell snippets are not discoverable, not typed and
+   not auditable.</li>
+<li><strong>Safety.</strong> The model can hallucinate a unit name, a path, a parameter or a value. A
+   production-quality design must assume the model is wrong and validate everything at a
+   trust boundary.</li>
+<li><strong>Change safety.</strong> A configuration change must be reversible. The system needs
+   validation, backups, automatic rollback and a human approval step.</li>
+<li><strong>Observability.</strong> The operator must be able to reconstruct what the agent did, with
+   which arguments, when, and with what result.</li>
+</ol>
+<h2 id="13-objectives">1.3 Objectives</h2>
+<p>The concrete objectives are:</p>
+<ul>
+<li>Research agentic AI architecture, tool use and the Model Context Protocol.</li>
+<li>Deploy an MCP server on Linux and expose at least ten useful tools, including
+  read-only diagnostics and controlled state changes.</li>
+<li>Implement the "extra shell script" required by the course: a safe nginx parameter
+  changer that validates, backs up, tests and rolls back configuration changes.</li>
+<li>Integrate the tools with an LLM agent that plans, calls tools, observes results and
+  reports honestly.</li>
+<li>Enforce least privilege with allow-lists, dry-run defaults, human approval, a narrow
+  sudoers rule and an audit log.</li>
+<li>Demonstrate real interaction between the agent and Linux services on a real host and in
+  an isolated reproducible laboratory.</li>
+<li>Produce an English final report and slide deck in the style of a "Đồ Án Cơ Sở" report.</li>
+</ul>
+<h2 id="14-scope">1.4 Scope</h2>
+<p><strong>In scope</strong></p>
+<ul>
+<li>Ubuntu 24.04/26.04 with systemd.</li>
+<li>nginx as the primary configurable service; systemd units as the action target.</li>
+<li>Read-only inspection of processes, disks, network, packages and Docker containers.</li>
+<li>MCP over stdio (default) and Streamable HTTP (localhost).</li>
+<li>Groq as the LLM provider, using OpenAI-compatible function calling.</li>
+<li>Eight allow-listed nginx parameters: <code>worker_processes</code>, <code>worker_connections</code>,
+  <code>client_max_body_size</code>, <code>keepalive_timeout</code>, <code>client_body_timeout</code>, <code>send_timeout</code>,
+  <code>gzip</code> and <code>server_tokens</code>.</li>
+</ul>
+<p><strong>Out of scope</strong></p>
+<ul>
+<li>A production multi-tenant control plane.</li>
+<li>Arbitrary shell execution, arbitrary file editing or arbitrary package installation.</li>
+<li>Built-in HTTP authentication or authorisation.</li>
+<li>Services other than nginx for configuration changes (the service helper is generic, but
+  the policy is intentionally narrow).</li>
+<li>Automatic remediation without human approval.</li>
+</ul>
+<h2 id="15-deliverables">1.5 Deliverables</h2>
+<table>
+<thead>
+<tr>
+<th>Deliverable</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCP server and tools</td>
+<td><code>linux_agent/</code>, <code>server.py</code></td>
+</tr>
+<tr>
+<td>Agent CLI</td>
+<td><code>linux_agent/agent/</code>, <code>agent.py</code></td>
+</tr>
+<tr>
+<td>Privileged helpers</td>
+<td><code>scripts/nginx_param.sh</code>, <code>scripts/service_ctl.sh</code></td>
+</tr>
+<tr>
+<td>Installer and sudoers validation</td>
+<td><code>scripts/install_privileged.sh</code></td>
+</tr>
+<tr>
+<td>Policy</td>
+<td><code>config/policy.toml</code></td>
+</tr>
+<tr>
+<td>Tests</td>
+<td><code>tests/</code> (29 tests)</td>
+</tr>
+<tr>
+<td>Final report</td>
+<td><code>docs/report.md</code></td>
+</tr>
+<tr>
+<td>Slides</td>
+<td><code>docs/slides.md</code></td>
+</tr>
+<tr>
+<td>Demo script and evidence</td>
+<td><code>docs/demo.md</code>, <code>docs/evidence/</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="16-report-structure">1.6 Report structure</h2>
+<p>Chapter 2 explains the background: systemd, nginx contexts, agentic AI and MCP. Chapter 3
+derives requirements and risks. Chapter 4 presents the architecture and security model.
+Chapter 5 describes the implementation. Chapter 6 reports the test plan, results and
+performance. Chapter 7 discusses limitations and future work. Chapter 8 concludes.</p>
+<h1 id="2-background-and-related-work">2. Background and Related Work</h1>
+<h2 id="21-linux-service-management">2.1 Linux service management</h2>
+<p><strong>systemd</strong> is the service manager on modern Ubuntu. A unit is described by a file such as
+<code>/lib/systemd/system/nginx.service</code>; <code>systemctl status</code> shows state and recent log lines,
+<code>systemctl start|stop|restart|reload</code> changes state, and <code>journalctl -u</code> reads the journal.
+<code>systemctl is-active</code> gives a machine-friendly state.</p>
+<p>Two properties matter for automation. First, unit names are not arbitrary strings: they
+have a grammar and must never be confused with command-line options. A leading <code>-</code> or a
+value containing <code>;</code> can change the meaning of a command. Second, actions are not equal:
+<code>reload</code> is usually graceful, <code>restart</code> interrupts connections, and <code>stop</code> takes the
+service down. The agent must know which action the user asked for and must not silently
+substitute a more destructive one.</p>
+<p><strong>nginx</strong> is a web server and reverse proxy. Its configuration is a tree of contexts. A
+directive is legal only in specific contexts. For example, <code>worker_processes</code> is a <code>main</code>
+context directive, <code>worker_connections</code> belongs in <code>events</code>, and <code>client_max_body_size</code>,
+<code>keepalive_timeout</code>, <code>gzip</code> and <code>server_tokens</code> are valid in <code>http</code> (and some also in
+<code>server</code>/<code>location</code>). Ubuntu's default <code>nginx.conf</code> includes
+<code>/etc/nginx/conf.d/*.conf</code> inside the <code>http</code> block, so a managed drop-in is the cleanest
+way to change HTTP-level parameters.</p>
+<p><code>nginx -t</code> parses the configuration and reports syntax errors, but it does not prove that a
+change is semantically desirable. A value can be syntactically valid and still be a bad
+operational choice. This is why the design keeps a human approval step even after
+validation.</p>
+<h2 id="22-agentic-ai-and-tool-use">2.2 Agentic AI and tool use</h2>
+<p>An LLM alone maps text to text. An <strong>agent</strong> adds a loop:</p>
+<ol>
+<li><strong>Plan:</strong> interpret the goal and choose a next action.</li>
+<li><strong>Act:</strong> call a tool with structured arguments.</li>
+<li><strong>Observe:</strong> read the tool result.</li>
+<li><strong>Revise:</strong> continue, stop or ask for clarification.</li>
+</ol>
+<p>This is often called a ReAct-style loop. Modern LLM APIs expose <strong>function calling</strong>:
+the caller supplies JSON schemas for tools, the model returns a tool name and JSON
+arguments, and the caller executes the tool and appends the result to the conversation.
+The model does not execute anything itself. This separation is the foundation of the
+security model in this project.</p>
+<p>Agentic systems are useful when the environment changes between steps, when the task
+requires multiple sources of truth, and when the correct next step depends on the result of
+the previous one. Linux administration fits all three: service state, logs, configuration
+and network probes interact.</p>
+<h2 id="23-the-model-context-protocol">2.3 The Model Context Protocol</h2>
+<p>MCP is an open protocol that standardises how an AI application (the <strong>host</strong>) discovers
+and calls capabilities exposed by a <strong>server</strong>. The host contains one or more <strong>clients</strong>;
+each client maintains a session with a server. The protocol uses JSON-RPC 2.0 messages.</p>
+<p>MCP defines three server primitives:</p>
+<ul>
+<li><strong>Tools</strong> are callable functions with a name, description and JSON Schema. They may have
+  side effects; tool annotations such as <code>readOnlyHint</code> and <code>destructiveHint</code> help the
+  client reason about risk.</li>
+<li><strong>Resources</strong> are readable data identified by a URI, such as a file, a status document
+  or a log. Resources are application-controlled, not model-controlled.</li>
+<li><strong>Prompts</strong> are reusable templates that a user or host can invoke to structure a task.</li>
+</ul>
+<p>The two common transports are <strong>stdio</strong> (the client spawns the server process and speaks
+over stdin/stdout) and <strong>Streamable HTTP</strong> (the server exposes an HTTP endpoint, optionally
+with server-sent events). stdio is ideal for a local desktop agent; HTTP is useful when the
+server runs as a service.</p>
+<p>The official Python SDK provides <code>FastMCP</code>, which turns decorated Python functions into
+MCP tools, resources and prompts. It generates JSON Schema from type hints and docstrings,
+which keeps the tool contract close to the implementation.</p>
+<p><img alt="Figure 1. MCP host/client/server architecture" src="diagrams/mcp-architecture.svg" /></p>
+<p><em>Figure 1. A host (the agent) contains an MCP client; the client talks JSON-RPC to an MCP
+server; the server owns the actual tools and data. Figure source: <code>docs/diagrams/</code>.</em></p>
+<h2 id="24-why-mcp-instead-of-ad-hoc-shell-scripts">2.4 Why MCP instead of ad-hoc shell scripts</h2>
+<p>A shell script can automate one task, but it is not discoverable by a model, has no schema,
+and usually has no policy boundary. MCP adds:</p>
+<ul>
+<li><strong>Discoverability:</strong> the client calls <code>tools/list</code> and receives names, descriptions and
+  JSON Schemas.</li>
+<li><strong>Typed arguments:</strong> the model must produce a JSON object; validation happens before
+  execution.</li>
+<li><strong>Composability:</strong> the same server can be used by different hosts and languages.</li>
+<li><strong>Observability:</strong> tool calls are discrete events that can be logged and approved.</li>
+<li><strong>Separation of concerns:</strong> the model reasons; the server enforces.</li>
+</ul>
+<p>The trade-off is more moving parts and a new protocol surface. For a teaching project, that
+surface is valuable because it makes the security boundary explicit.</p>
+<h2 id="25-related-work">2.5 Related work</h2>
+<ul>
+<li><strong>MCP reference servers</strong> (filesystem, git, fetch, memory) demonstrate the protocol but
+  are not designed for privileged Linux administration.</li>
+<li><strong>LangChain / LlamaIndex tool agents</strong> provide orchestration but usually leave the
+  execution boundary to the application.</li>
+<li><strong>OpenAI function calling and Groq's OpenAI-compatible API</strong> provide the model side of
+  tool use; this project uses Groq's API with an OpenAI-compatible schema.</li>
+<li><strong>Ansible</strong> is the mature declarative configuration-management approach. It is
+  idempotent and auditable, but it is not conversational and does not decide what to do
+  from natural-language intent.</li>
+<li><strong>CMU's Agents course</strong> and the public "Linux agent" example motivate the combination of
+  a reasoning loop with Linux tools.</li>
+</ul>
+<p>Linux Agent deliberately does not replace Ansible. It explores the layer above: how a
+model can choose and parameterise safe operations, with a human approving the risky ones.</p>
+<h2 id="26-security-principles-used-in-this-project">2.6 Security principles used in this project</h2>
+<ol>
+<li><strong>Least privilege.</strong> The agent runs as the normal user. Only two root-owned helpers are
+   reachable through sudo, and only for allow-listed operations.</li>
+<li><strong>Defence in depth.</strong> Validation happens in the Python server, again in the shell
+   helper, and finally in the kernel/sudo policy.</li>
+<li><strong>Human in the loop.</strong> A state-changing tool is not executed until the user approves it.</li>
+<li><strong>Fail safe.</strong> Dry-run is the default. If validation fails, the previous configuration
+   is restored.</li>
+<li><strong>Complete mediation.</strong> Every tool call goes through the same audited registration
+   wrapper.</li>
+<li><strong>Economy of mechanism.</strong> The helpers are small, readable shell scripts with explicit
+   cases, not a general command interpreter.</li>
+<li><strong>Auditability.</strong> Arguments, results, status and duration are recorded in JSONL.</li>
+<li><strong>Assume prompt injection.</strong> Any text the model reads (logs, configuration, web pages)
+   may contain instructions. The server never trusts model output as a command.</li>
+</ol>
+<h1 id="3-requirements-and-analysis">3. Requirements and Analysis</h1>
+<h2 id="31-stakeholders-and-use-cases">3.1 Stakeholders and use cases</h2>
+<table>
+<thead>
+<tr>
+<th>Actor</th>
+<th>Goal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Student operator</td>
+<td>Inspect and demonstrate Linux services from natural language</td>
+</tr>
+<tr>
+<td>Teaching assistant / lecturer</td>
+<td>Verify that the implementation is real, reproducible and safe</td>
+</tr>
+<tr>
+<td>System administrator</td>
+<td>Delegate a narrow, auditable operation without giving a shell</td>
+</tr>
+<tr>
+<td>Security reviewer</td>
+<td>Trace every privileged path and test the boundaries</td>
+</tr>
+</tbody>
+</table>
+<p>Primary use cases:</p>
+<ul>
+<li><strong>UC1 – Host health check:</strong> ask for a summary; agent calls read-only tools.</li>
+<li><strong>UC2 – Service triage:</strong> ask why nginx is unhealthy; agent reads status and logs.</li>
+<li><strong>UC3 – Safe configuration change:</strong> ask to change a parameter; agent inspects, dry-runs,
+  asks for approval, applies, validates and verifies.</li>
+<li><strong>UC4 – Rollback:</strong> ask to undo the last change; agent lists backups and restores one.</li>
+<li><strong>UC5 – Service action:</strong> ask to restart/reload an allow-listed unit; agent previews and
+  applies after approval.</li>
+<li><strong>UC6 – Audit review:</strong> operator inspects the JSONL trail and session transcript.</li>
+</ul>
+<h2 id="32-functional-requirements">3.2 Functional requirements</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR1</td>
+<td>Expose host identity, uptime, CPU, memory, disk and systemd state</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR2</td>
+<td>Expose systemd status, journal logs, failed units and service lists</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR3</td>
+<td>Expose network interfaces, routes, DNS and listening ports</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR4</td>
+<td>Expose nginx version, config test and managed parameter values</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR5</td>
+<td>Allow only allow-listed units and actions</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR6</td>
+<td>Change only allow-listed nginx parameters with validated values</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR7</td>
+<td>Back up configuration before a change and restore on failure</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR8</td>
+<td>Dry-run configuration and service changes</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR9</td>
+<td>Require human approval for non-dry-run writes</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR10</td>
+<td>Record every tool call in an audit log</td>
+<td>Must</td>
+</tr>
+<tr>
+<td>FR11</td>
+<td>Provide MCP resources and prompts in addition to tools</td>
+<td>Should</td>
+</tr>
+<tr>
+<td>FR12</td>
+<td>Support stdio and Streamable HTTP transports</td>
+<td>Should</td>
+</tr>
+<tr>
+<td>FR13</td>
+<td>Expose Docker container list and logs</td>
+<td>Could</td>
+</tr>
+<tr>
+<td>FR14</td>
+<td>Provide a reproducible lab demo without root</td>
+<td>Should</td>
+</tr>
+<tr>
+<td>FR15</td>
+<td>Provide an installer that validates sudoers with <code>visudo</code></td>
+<td>Must</td>
+</tr>
+</tbody>
+</table>
+<h2 id="33-non-functional-requirements">3.3 Non-functional requirements</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Requirement</th>
+<th>Acceptance criterion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NFR1</td>
+<td>Safety</td>
+<td>No shell execution; all arguments validated at two layers</td>
+</tr>
+<tr>
+<td>NFR2</td>
+<td>Security</td>
+<td>A non-allow-listed unit or parameter is rejected before execution</td>
+</tr>
+<tr>
+<td>NFR3</td>
+<td>Reversibility</td>
+<td>A failed <code>nginx -t</code> restores the previous files automatically</td>
+</tr>
+<tr>
+<td>NFR4</td>
+<td>Performance</td>
+<td>Read-only tool calls under 500 ms on the test host</td>
+</tr>
+<tr>
+<td>NFR5</td>
+<td>Usability</td>
+<td>A new user can run the read-only demo in under five minutes</td>
+</tr>
+<tr>
+<td>NFR6</td>
+<td>Portability</td>
+<td>Runs on Ubuntu 24.04/26.04 with Python 3.11+</td>
+</tr>
+<tr>
+<td>NFR7</td>
+<td>Maintainability</td>
+<td>Tools are separated by domain; policy is data, not code</td>
+</tr>
+<tr>
+<td>NFR8</td>
+<td>Observability</td>
+<td>Audit entries include timestamp, tool, args, result, duration, status</td>
+</tr>
+<tr>
+<td>NFR9</td>
+<td>Reproducibility</td>
+<td>Tests run without root and without changing the host</td>
+</tr>
+<tr>
+<td>NFR10</td>
+<td>Documentation</td>
+<td>README, report, slides and demo script are in English</td>
+</tr>
+</tbody>
+</table>
+<h2 id="34-risk-analysis">3.4 Risk analysis</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Likelihood</th>
+<th>Impact</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Prompt injection asks for destructive command</td>
+<td>Medium</td>
+<td>High</td>
+<td>No shell tool; fixed argv; allow-lists; approval</td>
+</tr>
+<tr>
+<td>Model hallucinates a unit/parameter</td>
+<td>High</td>
+<td>Medium</td>
+<td>Regex + allow-list at server and helper</td>
+</tr>
+<tr>
+<td>Bad value breaks nginx</td>
+<td>Medium</td>
+<td>High</td>
+<td>Value bounds; <code>nginx -t</code>; backup; automatic rollback</td>
+</tr>
+<tr>
+<td>User edits a helper that sudo runs</td>
+<td>Low</td>
+<td>Critical</td>
+<td>Root-owned 0755 helper; sudoers path restriction</td>
+</tr>
+<tr>
+<td>Secret leaks into audit/LLM context</td>
+<td>Medium</td>
+<td>High</td>
+<td>Redaction patterns; result truncation; local-only files</td>
+</tr>
+<tr>
+<td>Agent changes config without consent</td>
+<td>Medium</td>
+<td>High</td>
+<td>Dry-run default; CLI approval; write gate</td>
+</tr>
+<tr>
+<td>HTTP endpoint exposed to network</td>
+<td>Low</td>
+<td>High</td>
+<td>Bind localhost by default; document proxy/auth</td>
+</tr>
+<tr>
+<td>Audit log tampering</td>
+<td>Low</td>
+<td>Medium</td>
+<td>Append-only JSONL; can be shipped to remote syslog</td>
+</tr>
+<tr>
+<td>Approval fatigue</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Dry-run diffs; "always" only for one tool/session</td>
+</tr>
+<tr>
+<td>Model provider outage</td>
+<td>Medium</td>
+<td>Low</td>
+<td>Retries; clear error; read-only tools still work directly</td>
+</tr>
+</tbody>
+</table>
+<h2 id="35-requirement-traceability">3.5 Requirement traceability</h2>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Design/implementation</th>
+<th>Test evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR1–FR3</td>
+<td><code>tools/diagnostics.py</code></td>
+<td><code>test_mcp_server</code>, manual demo</td>
+</tr>
+<tr>
+<td>FR4</td>
+<td><code>tools/nginx.py</code>, <code>nginx_param.sh list/get</code></td>
+<td><code>test_nginx_script</code>, MCP test</td>
+</tr>
+<tr>
+<td>FR5</td>
+<td><code>policy.toml</code>, <code>services.py</code>, <code>service_ctl.sh</code></td>
+<td><code>test_nginx_script</code> service tests</td>
+</tr>
+<tr>
+<td>FR6</td>
+<td><code>config.py</code> parameter specs, <code>nginx_param.sh</code></td>
+<td><code>test_security</code>, <code>test_nginx_script</code></td>
+</tr>
+<tr>
+<td>FR7</td>
+<td><code>create_backup</code>, <code>restore_backup</code></td>
+<td><code>test_failed_config_test_*</code>, rollback test</td>
+</tr>
+<tr>
+<td>FR8</td>
+<td><code>dry_run=True</code> defaults</td>
+<td>MCP test, lab demo</td>
+</tr>
+<tr>
+<td>FR9</td>
+<td><code>MCPAgent.needs_approval</code>, CLI prompt</td>
+<td><code>test_agent_policy</code></td>
+</tr>
+<tr>
+<td>FR10</td>
+<td><code>Runtime.audited</code>, <code>AuditLog</code></td>
+<td>MCP test audit assertions</td>
+</tr>
+<tr>
+<td>FR11</td>
+<td><code>server.py</code> resources/prompts</td>
+<td>MCP test</td>
+</tr>
+<tr>
+<td>FR12</td>
+<td><code>server.py</code>, <code>client.py</code></td>
+<td>Manual HTTP run</td>
+</tr>
+<tr>
+<td>FR13</td>
+<td><code>container_list</code>, <code>container_logs</code></td>
+<td>Manual demo</td>
+</tr>
+<tr>
+<td>FR14</td>
+<td><code>scripts/lab_demo.sh</code></td>
+<td>Lab transcript</td>
+</tr>
+<tr>
+<td>FR15</td>
+<td><code>install_privileged.sh</code></td>
+<td><code>visudo -cf</code> in installer</td>
+</tr>
+</tbody>
+</table>
+<h1 id="4-system-design">4. System Design</h1>
+<h2 id="41-architecture">4.1 Architecture</h2>
+<p><img alt="Figure 2. Linux Agent component architecture" src="diagrams/architecture.svg" /></p>
+<p><em>Figure 2. The agent, MCP server, privileged helpers, policy and audit store. The model is
+outside the trust boundary; the server and helpers validate its output.</em></p>
+<p>The system has five layers:</p>
+<ol>
+<li><strong>User interface:</strong> interactive CLI or one-shot prompts.</li>
+<li><strong>Agent:</strong> Groq LLM, MCP client, approval gate, session log.</li>
+<li><strong>MCP server:</strong> FastMCP registration, tool implementations, resources, prompts,
+   policy enforcement, audit.</li>
+<li><strong>Privileged helpers:</strong> <code>service_ctl.sh</code> and <code>nginx_param.sh</code>, invoked through a narrow
+   sudoers rule.</li>
+<li><strong>Linux services:</strong> systemd, journald, nginx, Docker and the filesystem.</li>
+</ol>
+<h2 id="42-components">4.2 Components</h2>
+<h3 id="421-agent-cli">4.2.1 Agent CLI</h3>
+<p><code>linux_agent/agent/cli.py</code> parses arguments, loads the policy, opens either a stdio or
+Streamable HTTP MCP session, lists tools, and runs the loop. The system prompt includes the
+host name, whether writes are enabled, the allow-listed units and the managed parameters.
+The prompt tells the model to inspect first, dry-run changes and never invent output.</p>
+<p>The agent supports:</p>
+<ul>
+<li>interactive mode with <code>/tools</code>, <code>/reset</code>, <code>/audit</code>, <code>/policy</code>, <code>/quit</code>;</li>
+<li>one-shot prompts with <code>--prompt</code> (repeatable);</li>
+<li><code>--list-tools</code> without an API key;</li>
+<li><code>--auto-approve</code> for supervised demos;</li>
+<li><code>--quiet</code> to hide tool output previews.</li>
+</ul>
+<h3 id="422-mcp-client-and-llm-provider">4.2.2 MCP client and LLM provider</h3>
+<p><code>linux_agent/agent/client.py</code> contains <code>GroqLLM</code> and <code>MCPAgent</code>. <code>GroqLLM</code> wraps
+<code>client.chat.completions.create</code> with the MCP tools converted to OpenAI function schemas.
+It retries rate limits, connection errors and timeouts with exponential backoff and runs
+the blocking SDK call in a worker thread so the event loop stays responsive.</p>
+<p><code>MCPAgent</code> maintains the message history, calls the model, executes tool calls, appends
+tool results, enforces the step limit and asks the approval callback when needed. Tool
+results are truncated for the model to protect the context window; the full result remains
+in the audit log.</p>
+<h3 id="423-mcp-server-and-tool-modules">4.2.3 MCP server and tool modules</h3>
+<p><code>linux_agent/server.py</code> builds a <code>FastMCP</code> instance and registers three modules:</p>
+<ul>
+<li><code>tools/diagnostics.py</code> — read-only host, systemd, network, package, config, Docker and
+  nginx inspection.</li>
+<li><code>tools/services.py</code> — <code>service_action</code>.</li>
+<li><code>tools/nginx.py</code> — parameter inspection and controlled changes.</li>
+</ul>
+<p>Every tool is wrapped by <code>Runtime.audited</code>, which records the call. Tools return plain text
+that is easy for an LLM to read and easy for a human to verify. Structured JSON is used for
+the policy resource.</p>
+<h3 id="424-policy-and-configuration">4.2.4 Policy and configuration</h3>
+<p><code>config/policy.toml</code> is data, not code. It contains the write gate, audit path, output
+limits, timeouts, allowed units/actions, helper paths, nginx parameter specifications, file
+roots, network allow-list and agent settings. <code>linux_agent/config.py</code> loads it with
+<code>tomllib</code>, applies environment overrides and exposes typed accessors.</p>
+<p>Keeping policy in data makes the security review simple: a reviewer can read one file and
+know exactly which units and parameters are reachable.</p>
+<h3 id="425-privileged-helpers">4.2.5 Privileged helpers</h3>
+<p>The two helpers are the only privileged code:</p>
+<ul>
+<li><code>scripts/service_ctl.sh</code> validates an action and unit, checks
+  <code>/etc/linux-agent/allowed-units</code>, calls <code>systemctl</code>, records the result and prints the
+  new state.</li>
+<li><code>scripts/nginx_param.sh</code> implements the course's "extra shell script" requirement:
+  validation, context-aware editing, backup, atomic write, <code>nginx -t</code>, reload, rollback and
+  a lock.</li>
+</ul>
+<p><code>scripts/install_privileged.sh</code> copies them to <code>/usr/local/libexec/linux-agent</code>, sets
+<code>root:root 0755</code>, writes the allow-list, generates a sudoers rule with a <code>Cmnd_Alias</code>,
+validates it with <code>visudo -cf</code>, and installs it as <code>0440</code>. The repository copies are not
+trusted at runtime.</p>
+<h3 id="426-audit">4.2.6 Audit</h3>
+<p><code>linux_agent/audit.py</code> writes one JSON object per line. Each entry has a UTC timestamp,
+event type, process ID, user, tool name, redacted arguments, status, duration and a result
+preview. The agent writes a separate session transcript containing user messages,
+assistant messages, tool calls, approvals and results. This separation is useful: the server
+audit is the authoritative record of tool execution, while the session log is the
+conversation context.</p>
+<h2 id="43-sequence-safe-nginx-change">4.3 Sequence: safe nginx change</h2>
+<p><img alt="Figure 3. Safe nginx configuration change" src="diagrams/sequence.svg" /></p>
+<p><em>Figure 3. The agent inspects, dry-runs, asks for approval, applies through the helper,
+validates, reloads and verifies.</em></p>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    actor U as User
+    participant A as Agent
+    participant M as MCP server
+    participant H as nginx_param.sh
+    participant N as nginx
+
+    U-&gt;&gt;A: &quot;Set client_max_body_size to 20m&quot;
+    A-&gt;&gt;M: nginx_list_parameters()
+    M--&gt;&gt;A: current values
+    A-&gt;&gt;M: nginx_set_parameter(20m, dry_run=true)
+    M-&gt;&gt;H: set ... --dry-run
+    H--&gt;&gt;M: diff
+    M--&gt;&gt;A: diff
+    A-&gt;&gt;U: explain diff, request approval
+    U--&gt;&gt;A: approve
+    A-&gt;&gt;M: nginx_set_parameter(20m, dry_run=false, reload=true)
+    M-&gt;&gt;H: sudo -n nginx_param.sh set ...
+    H-&gt;&gt;H: validate, backup, atomic write
+    H-&gt;&gt;N: nginx -t
+    alt test fails
+        H-&gt;&gt;H: restore backup
+        H--&gt;&gt;M: error
+    else test passes
+        H-&gt;&gt;N: systemctl reload nginx
+        H--&gt;&gt;M: success + backup id
+    end
+    M--&gt;&gt;A: result
+    A-&gt;&gt;M: nginx_get_parameter(20m)
+    M--&gt;&gt;A: 20m
+    A--&gt;&gt;U: verified
+</code></pre>
+<h2 id="44-trust-boundaries">4.4 Trust boundaries</h2>
+<p><img alt="Figure 4. Trust boundaries" src="diagrams/trust-boundaries.svg" /></p>
+<p><em>Figure 4. Model output crosses into the server as untrusted JSON; the server crosses into
+the helper as validated arguments; the helper crosses into the kernel through sudo.</em></p>
+<table>
+<thead>
+<tr>
+<th>Boundary</th>
+<th>Input</th>
+<th>Control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>User → agent</td>
+<td>Natural language</td>
+<td>The user is the principal; the agent explains actions</td>
+</tr>
+<tr>
+<td>Model → server</td>
+<td>Tool name + JSON args</td>
+<td>Schema, regex, allow-lists, value bounds</td>
+</tr>
+<tr>
+<td>Server → helper</td>
+<td>argv</td>
+<td>Fixed binary, validated strings, no shell</td>
+</tr>
+<tr>
+<td>Helper → kernel</td>
+<td><code>systemctl</code>, <code>nginx</code></td>
+<td>sudoers command restriction, root-owned helper</td>
+</tr>
+<tr>
+<td>Helper → filesystem</td>
+<td>config paths</td>
+<td>Fixed destinations, atomic writes, backups</td>
+</tr>
+<tr>
+<td>Server/agent → log</td>
+<td>Tool results</td>
+<td>Redaction, preview truncation, local file permissions</td>
+</tr>
+</tbody>
+</table>
+<h2 id="45-tool-design">4.5 Tool design</h2>
+<p>The tool catalog follows three rules:</p>
+<ol>
+<li><strong>One job per tool.</strong> <code>disk_usage</code> does not also read nginx configuration.</li>
+<li><strong>Read-only unless the name says otherwise.</strong> Read-only tools are annotated and never
+   require approval.</li>
+<li><strong>Dry-run first for writes.</strong> A write tool has a <code>dry_run</code> parameter that defaults to
+   true and is documented in the description.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Type</th>
+<th>Arguments</th>
+<th>Side effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>system_overview</code></td>
+<td>read</td>
+<td>–</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>service_status</code></td>
+<td>read</td>
+<td>unit</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>service_logs</code></td>
+<td>read</td>
+<td>unit, lines, since</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>list_services</code></td>
+<td>read</td>
+<td>state, limit</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>failed_units</code></td>
+<td>read</td>
+<td>–</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>disk_usage</code></td>
+<td>read</td>
+<td>–</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>process_top</code></td>
+<td>read</td>
+<td>sort_by, limit</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>network_overview</code></td>
+<td>read</td>
+<td>–</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>listening_ports</code></td>
+<td>read</td>
+<td>–</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>http_probe</code></td>
+<td>read</td>
+<td>url</td>
+<td>outbound HTTP to allow-listed host</td>
+</tr>
+<tr>
+<td><code>package_info</code></td>
+<td>read</td>
+<td>name</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>read_config</code></td>
+<td>read</td>
+<td>path, max_lines</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>container_list</code></td>
+<td>read</td>
+<td>all_containers</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>container_logs</code></td>
+<td>read</td>
+<td>name, lines</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>nginx_info</code></td>
+<td>read</td>
+<td>–</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>nginx_list_parameters</code></td>
+<td>read</td>
+<td>–</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>nginx_get_parameter</code></td>
+<td>read</td>
+<td>parameter</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>nginx_test_config</code></td>
+<td>read</td>
+<td>–</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>nginx_list_backups</code></td>
+<td>read</td>
+<td>–</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>nginx_diff_backup</code></td>
+<td>read</td>
+<td>backup_id</td>
+<td>none</td>
+</tr>
+<tr>
+<td><code>service_action</code></td>
+<td>write</td>
+<td>unit, action, dry_run</td>
+<td>systemd state</td>
+</tr>
+<tr>
+<td><code>nginx_set_parameter</code></td>
+<td>write</td>
+<td>parameter, value, reload, dry_run</td>
+<td>nginx config</td>
+</tr>
+<tr>
+<td><code>nginx_rollback</code></td>
+<td>write</td>
+<td>backup_id, reload, dry_run</td>
+<td>nginx config</td>
+</tr>
+</tbody>
+</table>
+<h2 id="46-security-architecture">4.6 Security architecture</h2>
+<p>The design uses seven layers:</p>
+<ol>
+<li><strong>No shell.</strong> <code>runner.py</code> uses <code>subprocess.Popen</code> with an argv list, <code>shell=False</code> by
+   default, a minimal environment, a timeout and process-group kill. There is no tool that
+   accepts a command string.</li>
+<li><strong>Syntactic validation.</strong> <code>security.py</code> validates unit names, action names, parameter
+   names, package names, container names, backup IDs, paths and time windows.</li>
+<li><strong>Policy validation.</strong> The server checks the unit/action against <code>policy.toml</code>; the
+   nginx parameter must exist in the policy and the value must match the parameter regex
+   and semantic bounds.</li>
+<li><strong>Privilege separation.</strong> The server runs as a normal user. Only the two helpers are
+   allowed through sudo, with no wildcard command and no shell.</li>
+<li><strong>Change safety.</strong> The helper creates a timestamped backup, writes atomically, runs
+   <code>nginx -t</code>, restores on failure, and optionally reloads. A file lock prevents concurrent
+   changes.</li>
+<li><strong>Human approval.</strong> The agent asks before a non-dry-run write. <code>--auto-approve</code> is an
+   explicit opt-in for supervised demos.</li>
+<li><strong>Audit and redaction.</strong> Every tool call is logged with redacted arguments. Common
+   secret assignments and private keys are removed from config reads and HTTP bodies.</li>
+</ol>
+<h3 id="why-two-validation-layers">Why two validation layers?</h3>
+<p>The Python layer is convenient and produces good error messages for the model. The shell
+layer is the last line of defence if the server is compromised, misconfigured or called by
+a different MCP client. Duplicating a small amount of validation is cheaper than trusting a
+single process.</p>
+<h3 id="why-dry-run-by-default">Why dry-run by default?</h3>
+<p>An LLM can misunderstand intent. A dry run produces a diff and a clear "no change was
+made" message. It also gives the human a concrete artifact to approve. The lab and tests
+show that a dry run does not create the managed file.</p>
+<h2 id="47-nginx-helper-algorithm">4.7 nginx helper algorithm</h2>
+<pre><code class="language-text">set(parameter, value, dry_run, reload):
+    validate parameter is in the allow-list
+    validate value against the parameter regex and bounds
+    read the current value
+    render a candidate file:
+        http parameters -&gt; managed drop-in 99-linux-agent.conf
+        main/events     -&gt; replace the existing directive in nginx.conf
+    if candidate == current: report &quot;no change&quot; and stop
+    if dry_run: show unified diff and stop
+    acquire the file lock
+    create a timestamped backup (including absent-file markers)
+    atomically replace the target
+    run nginx -t
+    if the test fails:
+        restore the backup
+        report failure
+    if reload requested:
+        systemctl reload nginx
+        if reload fails:
+            restore the backup, restore the old running config, report failure
+    print success, backup id, test output and diff
+</code></pre>
+<p>Two details are important:</p>
+<ul>
+<li><strong>Absent-file markers.</strong> If the managed drop-in did not exist before the change, the
+  backup records that fact. A failed test removes the new file instead of leaving a
+  half-applied change.</li>
+<li><strong>Safety backup on rollback.</strong> Rolling back is itself a change. The helper first backs up
+  the current state, so a failed rollback can be undone.</li>
+</ul>
+<h2 id="48-agent-loop-algorithm">4.8 Agent loop algorithm</h2>
+<p><img alt="Figure 5. Agent Plan-Act-Observe loop" src="diagrams/agent-loop.svg" /></p>
+<p><em>Figure 5. The bounded loop. Non-dry-run writes pass through the approval gate before the
+MCP call; a denial is returned to the model as a tool error.</em></p>
+<pre><code class="language-text">run_turn(user_text):
+    append user message
+    for step in 1..max_steps:
+        turn = LLM.complete(messages, tool_schemas)
+        append assistant message (content + tool calls)
+        if no tool calls: return content
+        for each tool call:
+            parse JSON arguments
+            if the tool is mutating and not a dry run:
+                ask the user; if denied, append DENIED and continue
+            result = MCP.call_tool(name, args)
+            truncate result for the model
+            append tool result
+    return &quot;stopped after max steps&quot;
+</code></pre>
+<p>The loop is deliberately bounded. It does not implement recursive planning or a separate
+critic model, because the project's focus is the tool boundary and the safety properties,
+not autonomous planning quality.</p>
+<h2 id="49-deployment-topologies">4.9 Deployment topologies</h2>
+<p><img alt="Figure 6. Deployment topologies" src="diagrams/deployment.svg" /></p>
+<p><em>Figure 6. (a) Local stdio: the agent spawns the server. (b) Local HTTP: the server runs as a
+service; the agent connects to localhost. (c) Remote: an authenticated reverse proxy is
+required and is outside the current scope.</em></p>
+<ul>
+<li><strong>stdio</strong> is the default. It has no network listener, so the attack surface is the local
+  process boundary.</li>
+<li><strong>Streamable HTTP</strong> binds <code>127.0.0.1:8000</code> by default. It is useful for demonstrating a
+  separate server process and for a future web UI.</li>
+<li><strong>systemd service</strong> examples are in <code>deploy/</code>. The service runs as a dedicated user, and
+  the sudoers rule allows only the two helpers. Because the service needs sudo, the example
+  does not set <code>NoNewPrivileges=yes</code>; that hardening option would block sudo itself.</li>
+</ul>
+<h2 id="410-design-trade-offs">4.10 Design trade-offs</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Alternative</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shell helpers for privileged work</td>
+<td>Python <code>systemctl</code> calls</td>
+<td>Small, reviewable, easy to run under sudo; demonstrates the course requirement</td>
+</tr>
+<tr>
+<td>Managed drop-in for HTTP parameters</td>
+<td>Rewrite arbitrary config files</td>
+<td>Avoids touching unrelated includes; clear ownership</td>
+</tr>
+<tr>
+<td>Fixed nginx main-file editing for <code>worker_*</code></td>
+<td>Generic config parser</td>
+<td>Configuration contexts are hard; refusing to guess is safer</td>
+</tr>
+<tr>
+<td>Groq OpenAI-compatible API</td>
+<td>Local model</td>
+<td>Fast, free tier, reliable function calling on the test host</td>
+</tr>
+<tr>
+<td>Text results</td>
+<td>Structured JSON</td>
+<td>Easier for the LLM and the human; JSON is used where structure matters</td>
+</tr>
+<tr>
+<td>No arbitrary shell</td>
+<td>"Just run this command" tool</td>
+<td>An unrestricted shell would invalidate the security model</td>
+</tr>
+</tbody>
+</table>
+<h1 id="5-implementation">5. Implementation</h1>
+<h2 id="51-environment">5.1 Environment</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OS</td>
+<td>Ubuntu 26.04.1 LTS (Resolute Raccoon)</td>
+</tr>
+<tr>
+<td>Kernel</td>
+<td>7.0.0-43-generic</td>
+</tr>
+<tr>
+<td>systemd</td>
+<td>259</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.14.4</td>
+</tr>
+<tr>
+<td>MCP SDK</td>
+<td><code>mcp</code> 1.30.0 (FastMCP)</td>
+</tr>
+<tr>
+<td>LLM</td>
+<td>Groq <code>openai/gpt-oss-20b</code></td>
+</tr>
+<tr>
+<td>nginx</td>
+<td>1.28.3 (Ubuntu)</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>available on the test host</td>
+</tr>
+</tbody>
+</table>
+<p>The project uses only the Python standard library plus <code>mcp</code>, <code>groq</code>, <code>python-dotenv</code> and
+<code>httpx</code>. <code>httpx</code> is used by the local HTTP probe and is already a dependency of the MCP
+SDK.</p>
+<h2 id="52-repository-structure">5.2 Repository structure</h2>
+<pre><code class="language-text">linux_agent/
+├── agent/
+│   ├── cli.py          # argparse, interactive loop, approval prompt
+│   └── client.py       # GroqLLM, MCPAgent, session openers
+├── tools/
+│   ├── diagnostics.py  # 20 read-only tools, resources
+│   ├── services.py     # service_action
+│   └── nginx.py        # nginx tools and resource
+├── audit.py            # JSONL audit writer
+├── config.py           # policy loader, typed parameters, env overrides
+├── runner.py           # no-shell subprocess runner, privileged invocation
+├── runtime.py          # write gate, throttle, audit decorator
+├── security.py         # validation, redaction, path confinement
+└── server.py           # FastMCP registration, resources, prompts, main()
+</code></pre>
+<p>The root <code>server.py</code> and <code>agent.py</code> are thin compatibility wrappers so that the original
+starter commands still work. The real implementation lives in the package.</p>
+<h2 id="53-mcp-server-implementation">5.3 MCP server implementation</h2>
+<p><code>create_server()</code> loads the policy, creates an <code>AuditLog</code> and a <code>Runtime</code>, instantiates
+<code>FastMCP</code>, and calls the three <code>register()</code> functions. A representative tool:</p>
+<pre><code class="language-python">@mcp.tool(annotations=READ_ONLY)
+@rt.audited
+def disk_usage() -&gt; str:
+    &quot;&quot;&quot;Show filesystem usage in human-readable form (read-only).&quot;&quot;&quot;
+    result = run([&quot;df&quot;, &quot;-hT&quot;, &quot;-x&quot;, &quot;squashfs&quot;], timeout=cfg.read_timeout)
+    return truncate_bytes(result.output, cfg.max_output_bytes)
+</code></pre>
+<p>The decorator order matters: <code>@mcp.tool</code> sees the wrapper produced by <code>@rt.audited</code>, and
+<code>functools.wraps</code> preserves the name, docstring and signature, so FastMCP still generates
+the correct JSON Schema. The wrapper records arguments, result, status and duration.</p>
+<p>Resources are registered with <code>@mcp.resource</code>:</p>
+<pre><code class="language-python">@mcp.resource(&quot;linux://system/summary&quot;, mime_type=&quot;text/plain&quot;)
+def system_summary_resource() -&gt; str:
+    return system_overview()
+</code></pre>
+<p>Prompts are registered with <code>@mcp.prompt</code>. The <code>change_nginx_parameter</code> prompt encodes the
+safe workflow (inspect → dry-run → explain → approve → apply → verify), which improves
+model behaviour without hard-coding a scripted conversation.</p>
+<h2 id="54-read-only-tools">5.4 Read-only tools</h2>
+<p>The diagnostics module uses fixed commands:</p>
+<ul>
+<li><code>system_overview</code> reads <code>/proc</code> and <code>/etc/os-release</code> directly, avoiding dependencies.</li>
+<li><code>service_status</code> runs <code>systemctl status</code> with <code>--no-pager -l -n 15</code>.</li>
+<li><code>service_logs</code> runs <code>journalctl</code> with a validated <code>--since</code> value and a line cap.</li>
+<li><code>disk_usage</code> runs <code>df -hT -x squashfs</code>.</li>
+<li><code>process_top</code> runs <code>ps</code> with a fixed field list and an allowed sort key.</li>
+<li><code>network_overview</code> runs <code>ip -brief address</code> and <code>ip route</code>, then reads resolvers.</li>
+<li><code>listening_ports</code> runs <code>ss -tulpn</code>, falling back to <code>ss -tuln</code> if process information is
+  unavailable.</li>
+<li><code>read_config</code> resolves the path against allowed roots, checks size, redacts secrets and
+  adds line numbers.</li>
+<li><code>http_probe</code> accepts only allow-listed hosts, disables redirects and environment
+  proxies, and caps the body preview.</li>
+<li><code>package_info</code> runs <code>dpkg-query</code> and <code>apt-cache policy</code>.</li>
+<li>Docker tools use <code>docker ps</code> and <code>docker logs</code>, with a name regex.</li>
+</ul>
+<p>A recurring pattern is <strong>validated arguments, fixed argv, bounded output</strong>. The model cannot
+turn a line count into an option because the line count is parsed as an integer and clamped.</p>
+<h2 id="55-service-action">5.5 Service action</h2>
+<p><code>service_action</code> first validates the unit and action, then checks the policy. A dry run
+returns the exact helper command without executing it. A real run acquires the write gate
+and throttle, invokes <code>sudo -n /usr/local/libexec/linux-agent/service_ctl.sh action unit</code>,
+then reads <code>systemctl is-active</code> and the last journal lines.</p>
+<p>The helper independently validates the unit regex and reads
+<code>/etc/linux-agent/allowed-units</code>. It uses <code>systemctl action -- unit.service</code>, records the
+attempt and result with <code>logger</code> and in <code>/var/log/linux-agent/actions.log</code>, and prints the
+new state. <code>stop</code> is allowed by policy but the agent asks for approval, because stopping a
+service is destructive.</p>
+<h2 id="56-the-nginx-helper">5.6 The nginx helper</h2>
+<p><code>scripts/nginx_param.sh</code> is the largest shell component. Its command surface is:</p>
+<pre><code class="language-text">nginx_param.sh list
+nginx_param.sh get &lt;parameter&gt;
+nginx_param.sh set &lt;parameter&gt; &lt;value&gt; [--dry-run] [--reload]
+nginx_param.sh test
+nginx_param.sh status
+nginx_param.sh list-backups
+nginx_param.sh diff-backup &lt;backup-id&gt;
+nginx_param.sh rollback &lt;backup-id&gt; [--dry-run] [--reload]
+</code></pre>
+<p>Key implementation choices:</p>
+<h3 id="context-aware-editing">Context-aware editing</h3>
+<ul>
+<li><strong>HTTP parameters</strong> are written to <code>/etc/nginx/conf.d/99-linux-agent.conf</code>. The helper
+  parses the existing managed values, updates the requested key, and regenerates the file
+  in a stable order. This avoids duplicate directives and keeps unrelated files untouched.</li>
+<li><strong>Main/events parameters</strong> (<code>worker_processes</code>, <code>worker_connections</code>) are edited in
+  <code>nginx.conf</code> by an <code>awk</code> script that replaces the first uncommented directive, preserving
+  indentation. If the directive is absent, the helper fails rather than guessing a context.</li>
+</ul>
+<h3 id="atomic-writes">Atomic writes</h3>
+<p>The helper creates a temporary file in the destination directory, copies permissions and
+ownership from the existing file, then <code>mv</code>s it into place. This avoids a partially written
+configuration if the process is interrupted.</p>
+<h3 id="backup-format">Backup format</h3>
+<p>A backup is a directory under <code>/var/backups/linux-agent/nginx/&lt;timestamp&gt;-&lt;pid&gt;/</code> with:</p>
+<pre><code class="language-text">meta          action=set, parameter=..., old=..., new=..., created=..., host=...
+files.map     original path &lt;TAB&gt; saved file
+absent.map    original paths that did not exist before the change
+nginx.conf    copy of the main file, if present
+dropin.conf   copy of the managed drop-in, if present
+</code></pre>
+<p>The <code>absent.map</code> is what makes rollback correct for a first-time change: a failed test
+removes the newly created drop-in instead of leaving it behind.</p>
+<h3 id="validation-and-rollback">Validation and rollback</h3>
+<p>Values are validated twice: the Python <code>NginxParameter.validate</code> method and the shell
+<code>validate_value</code> function. Bounds are explicit:</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>worker_processes</code></td>
+<td><code>auto</code> or 1–64</td>
+</tr>
+<tr>
+<td><code>worker_connections</code></td>
+<td>128–65535</td>
+</tr>
+<tr>
+<td><code>client_max_body_size</code></td>
+<td>0 or a size with k/m/g suffix, at most 10g</td>
+</tr>
+<tr>
+<td><code>keepalive_timeout</code></td>
+<td>0–600 s</td>
+</tr>
+<tr>
+<td><code>client_body_timeout</code></td>
+<td>0–300 s</td>
+</tr>
+<tr>
+<td><code>send_timeout</code></td>
+<td>0–300 s</td>
+</tr>
+<tr>
+<td><code>gzip</code></td>
+<td>on/off</td>
+</tr>
+<tr>
+<td><code>server_tokens</code></td>
+<td>on/off</td>
+</tr>
+</tbody>
+</table>
+<p>After the write, <code>nginx -t</code> must pass. If it fails, the helper restores the backup and exits
+non-zero. If a reload was requested and fails, it restores the backup, tests the old
+configuration and attempts to reload the old configuration, then exits non-zero.</p>
+<h3 id="concurrency">Concurrency</h3>
+<p>A <code>flock</code> on <code>${BACKUP_DIR}/.lock</code> serialises changes. The server also serialises writes and
+enforces a minimum interval. The two mechanisms are independent: the lock protects
+concurrent processes, the throttle reduces accidental rapid-fire changes.</p>
+<h2 id="57-installer-and-sudoers">5.7 Installer and sudoers</h2>
+<p><code>scripts/install_privileged.sh</code> performs five steps:</p>
+<ol>
+<li>Verify root, target user, repository scripts and <code>visudo</code>.</li>
+<li>Copy the helpers to <code>/usr/local/libexec/linux-agent</code> with <code>root:root 0755</code>.</li>
+<li>Write <code>/etc/linux-agent/allowed-units</code> and create backup/log directories.</li>
+<li>Generate a sudoers file with a <code>Cmnd_Alias</code> for exactly the two helper paths.</li>
+<li>Validate with <code>visudo -cf</code> and install as <code>root:root 0440</code>.</li>
+</ol>
+<p>The generated rule is:</p>
+<pre><code class="language-sudoers">Cmnd_Alias LINUX_AGENT_HELPERS = /usr/local/libexec/linux-agent/nginx_param.sh, /usr/local/libexec/linux-agent/service_ctl.sh
+alice ALL=(root) NOPASSWD: LINUX_AGENT_HELPERS
+</code></pre>
+<p>There is no wildcard command and no <code>SETENV</code>. The helper path is root-owned, so the invoking
+user cannot replace it with a malicious script. <code>uninstall_privileged.sh</code> removes the rule
+and helpers, and keeps logs/backups unless <code>--purge</code> is used.</p>
+<h2 id="58-agent-implementation">5.8 Agent implementation</h2>
+<p><code>GroqLLM.complete</code> converts each MCP tool into:</p>
+<pre><code class="language-python">{
+  &quot;type&quot;: &quot;function&quot;,
+  &quot;function&quot;: {
+    &quot;name&quot;: tool.name,
+    &quot;description&quot;: tool.description,
+    &quot;parameters&quot;: tool.inputSchema,
+  },
+}
+</code></pre>
+<p>and sends the conversation with <code>tool_choice="auto"</code>. The response is normalised into a
+<code>Turn(content, tool_calls)</code> object. Only the fields the API expects are copied into the
+assistant message; provider-specific fields such as reasoning traces are not fed back.</p>
+<p>The approval decision is:</p>
+<pre><code class="language-python">def needs_approval(tool, arguments):
+    if not is_mutating(tool):
+        return False
+    if tool.name in WRITE_TOOL_NAMES and arguments.get(&quot;dry_run&quot;, True):
+        return False
+    return not (auto_approve or tool.name in always_approved)
+</code></pre>
+<p>The CLI approval prompt supports:</p>
+<pre><code class="language-text">Approve? [y]es / [N]o / [a]lways
+</code></pre>
+<p><code>always</code> applies to one tool for the current session. It is not persisted. This is a
+deliberate compromise between safety and approval fatigue.</p>
+<h2 id="59-error-handling">5.9 Error handling</h2>
+<p>The system distinguishes expected policy errors from execution failures:</p>
+<ul>
+<li>A policy violation (<code>unit not allow-listed</code>, <code>write disabled</code>) raises <code>PolicyError</code>, which
+  FastMCP returns as a tool error with a readable message.</li>
+<li>A helper failure raises <code>ToolExecutionError</code> with the helper output.</li>
+<li>A model/API failure raises <code>LLMError</code>; the CLI prints it and keeps the interactive loop
+  alive.</li>
+<li>A timeout kills the whole process group, so a hung <code>systemctl</code> or <code>nginx</code> cannot leak a
+  child process.</li>
+</ul>
+<h2 id="510-user-experience">5.10 User experience</h2>
+<p>The CLI prints the server policy, model, audit path, session path and tool list at startup.
+For each tool call it prints the name and arguments, then a preview of the result. The
+final answer is Markdown. This transparency is intentional: the operator should see what
+the agent did, not just the answer.</p>
+<h1 id="6-testing-and-evaluation">6. Testing and Evaluation</h1>
+<h2 id="61-test-strategy">6.1 Test strategy</h2>
+<p>The evaluation uses five layers:</p>
+<ol>
+<li><strong>Unit tests</strong> for validation, redaction, path confinement, policy loading and parameter
+   bounds.</li>
+<li><strong>Shell helper tests</strong> using temporary configuration trees and fake <code>nginx</code>/<code>systemctl</code>
+   binaries.</li>
+<li><strong>Agent policy tests</strong> for the approval decision.</li>
+<li><strong>MCP integration tests</strong> that spawn the real server over stdio, list tools/resources/
+   prompts, call read-only tools and verify write rejection.</li>
+<li><strong>End-to-end laboratory</strong> that applies a change, verifies it, lists the backup and rolls
+   it back through the real MCP server and real shell helper.</li>
+</ol>
+<p>The tests do not require root and do not modify <code>/etc/nginx</code>. The real-host demonstration is
+separate and is recorded in the evidence file.</p>
+<h2 id="62-test-environment">6.2 Test environment</h2>
+<p>The full suite was run with:</p>
+<pre><code class="language-bash">cd /home/lcsang/linux-agent
+.venv/bin/python -m unittest discover -v
+</code></pre>
+<p>Result:</p>
+<pre><code class="language-text">Ran 29 tests in 4.394s
+
+OK
+</code></pre>
+<h2 id="63-test-matrix-and-results">6.3 Test matrix and results</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Area</th>
+<th>Case</th>
+<th>Expected</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>T01</td>
+<td>Unit validation</td>
+<td>Accept <code>nginx</code>, <code>nginx.service</code>, <code>getty@tty1.service</code></td>
+<td>Accepted</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T02</td>
+<td>Unit validation</td>
+<td>Reject <code>-nginx</code>, <code>../nginx</code>, <code>nginx;rm -rf /</code>, <code>nginx --now</code></td>
+<td>Rejected</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T03</td>
+<td>Action validation</td>
+<td>Accept <code>RESTART</code> as <code>restart</code></td>
+<td>Normalised</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T04</td>
+<td>Action validation</td>
+<td>Reject <code>mask</code>, <code>restart --now</code></td>
+<td>Rejected</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T05</td>
+<td>Redaction</td>
+<td>Redact <code>db_password</code>, <code>api_key</code>, <code>Authorization</code>, private key</td>
+<td>Redacted</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T06</td>
+<td>Truncation</td>
+<td>UTF-8 safe byte limit</td>
+<td>Bounded</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T07</td>
+<td>Path confinement</td>
+<td>Allow <code>config/app.toml</code>, reject <code>/etc/passwd</code></td>
+<td>Correct</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T08</td>
+<td>Policy</td>
+<td>Default write disabled, nginx allowed, 8 parameters</td>
+<td>Correct</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T09</td>
+<td>Policy</td>
+<td><code>LINUX_AGENT_ALLOW_WRITE=1</code> enables writes</td>
+<td>Enabled</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T10</td>
+<td>Parameters</td>
+<td>Accept <code>20m</code>, <code>0</code>, <code>auto</code>, <code>4</code></td>
+<td>Accepted</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T11</td>
+<td>Parameters</td>
+<td>Reject <code>20x</code>, <code>-1m</code>, <code>99999g</code>, <code>65</code>, <code>2.5</code></td>
+<td>Rejected</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T12</td>
+<td>Approval</td>
+<td>Read-only tool never needs approval</td>
+<td>No prompt</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T13</td>
+<td>Approval</td>
+<td>Write tool dry-run needs no approval</td>
+<td>No prompt</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T14</td>
+<td>Approval</td>
+<td>Write tool <code>dry_run=false</code> needs approval</td>
+<td>Prompt</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T15</td>
+<td>Approval</td>
+<td>Unknown mutating tool needs approval</td>
+<td>Prompt</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T16</td>
+<td>Approval</td>
+<td><code>auto_approve</code> bypasses prompt</td>
+<td>No prompt</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T17</td>
+<td>nginx helper</td>
+<td><code>list</code>/<code>get</code> current values</td>
+<td>Correct</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T18</td>
+<td>nginx helper</td>
+<td>Dry run does not create the drop-in</td>
+<td>No file</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T19</td>
+<td>nginx helper</td>
+<td>Apply HTTP parameter, create backup</td>
+<td>Applied</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T20</td>
+<td>nginx helper</td>
+<td>Apply main and events parameters</td>
+<td>Applied</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T21</td>
+<td>nginx helper</td>
+<td>Invalid value rejected</td>
+<td>No change</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T22</td>
+<td>nginx helper</td>
+<td>Failed <code>nginx -t</code> removes a new file</td>
+<td>Removed</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T23</td>
+<td>nginx helper</td>
+<td>Failed <code>nginx -t</code> restores an existing file</td>
+<td>Restored</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T24</td>
+<td>nginx helper</td>
+<td>Rollback returns to the earlier value</td>
+<td>Restored</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T25</td>
+<td>nginx helper</td>
+<td>Unknown parameter rejected</td>
+<td>Rejected</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T26</td>
+<td>service helper</td>
+<td>Allowed restart</td>
+<td>OK</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T27</td>
+<td>service helper</td>
+<td><code>nginx.service</code> normalised</td>
+<td>OK</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T28</td>
+<td>service helper</td>
+<td>Disallowed unit</td>
+<td>Rejected, no systemctl call</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T29</td>
+<td>service helper</td>
+<td>Invalid action/unit</td>
+<td>Rejected</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T30</td>
+<td>MCP stdio</td>
+<td>23 tools, annotations, resources, prompts</td>
+<td>Correct</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T31</td>
+<td>MCP stdio</td>
+<td>Read-only tools work</td>
+<td>Correct</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T32</td>
+<td>MCP stdio</td>
+<td>Dry-run nginx diff</td>
+<td>Correct</td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T33</td>
+<td>MCP stdio</td>
+<td>Write rejected when disabled</td>
+<td><code>isError</code></td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T34</td>
+<td>MCP stdio</td>
+<td>Disallowed service unit</td>
+<td><code>isError</code></td>
+<td>Pass</td>
+</tr>
+<tr>
+<td>T35</td>
+<td>MCP stdio</td>
+<td>Write path with unprivileged fake helper</td>
+<td>Applied + audited</td>
+<td>Pass</td>
+</tr>
+</tbody>
+</table>
+<p>The table lists 35 checks but 29 test methods: several methods assert multiple cases
+(parametrised loops) and the MCP test method covers T30–T34.</p>
+<h2 id="64-end-to-end-laboratory">6.4 End-to-end laboratory</h2>
+<p><code>scripts/lab_demo.sh</code> creates a temporary configuration tree, a fake <code>nginx</code>, a fake
+<code>systemctl</code> and a wrapper that points the real helper at the lab. It then calls the real MCP
+server through stdio and performs:</p>
+<ol>
+<li><code>nginx_list_parameters</code> — initial values.</li>
+<li><code>nginx_set_parameter(..., dry_run=true)</code> — diff, no file created.</li>
+<li><code>nginx_set_parameter(..., dry_run=false)</code> — apply, backup, <code>nginx -t</code>.</li>
+<li><code>nginx_get_parameter</code> — verify <code>20m</code>.</li>
+<li><code>nginx_list_backups</code> — inspect the backup.</li>
+<li><code>nginx_rollback(..., dry_run=false)</code> — restore with a safety backup.</li>
+<li><code>nginx_get_parameter</code> — verify <code>unset</code>.</li>
+<li>Read the server audit tail.</li>
+</ol>
+<p>Representative output (full transcript in <code>docs/evidence/lab-demo.txt</code>):</p>
+<pre><code class="language-text">--- 2. Dry run: client_max_body_size 20m (no write) ---
+DRY RUN: client_max_body_size = 20m (context: http)
+...
++client_max_body_size 20m;
+
+--- 3. Apply: client_max_body_size 20m (validated + backed up) ---
+APPLIED: client_max_body_size = 20m (context: http)
+applied client_max_body_size (unset) -&gt; 20m (http) backup=20261114T151709Z-54754 reload=no
+Config test: passed
+
+--- 4. Verify the new value ---
+Value: 20m
+
+--- 5. Backups ---
+id: 20261114T151709Z-54754
+  action=set
+  parameter=client_max_body_size
+  old=(unset)
+  new=20m
+
+--- 6. Roll back 20261114T151709Z-54754 ---
+rolled back to 20261114T151709Z-54754 (safety backup=... reload=no)
+Config test: passed
+
+--- 7. Verify the value after rollback ---
+Value: unset
+</code></pre>
+<p>The final state shows the managed drop-in absent, as expected after rollback.</p>
+<h2 id="65-real-host-demonstration">6.5 Real-host demonstration</h2>
+<p>A read-only prompt was run against the actual Ubuntu host:</p>
+<pre><code class="language-text">Give me a short health summary of this machine: host, uptime, disk usage and whether
+nginx is running. Use the tools.
+</code></pre>
+<p>The agent called <code>system_overview</code>, <code>disk_usage</code> and <code>service_status("nginx.service")</code> and
+produced a table with the hostname, uptime, root filesystem usage (89%), and nginx active
+since 21:43:45. The answer quoted the tool output and did not invent values.</p>
+<p>A second prompt asked for a dry-run change of <code>client_max_body_size</code> to <code>20m</code>. The agent
+called <code>nginx_list_parameters</code> and <code>nginx_set_parameter(..., dry_run=true)</code>, showed the
+diff to <code>/etc/nginx/conf.d/99-linux-agent.conf</code>, and did not create the file. This is the
+intended behaviour when write mode is disabled.</p>
+<h2 id="66-performance">6.6 Performance</h2>
+<p>The following numbers were measured on the test host with the MCP server over stdio. Each
+tool was called three times; the median is shown.</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th style="text-align: right;">Median</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>system_overview</code></td>
+<td style="text-align: right;">14.8 ms</td>
+<td>reads <code>/proc</code> and <code>/etc/os-release</code></td>
+</tr>
+<tr>
+<td><code>disk_usage</code></td>
+<td style="text-align: right;">12.8 ms</td>
+<td><code>df -hT</code></td>
+</tr>
+<tr>
+<td><code>service_status</code></td>
+<td style="text-align: right;">20.7 ms</td>
+<td><code>systemctl status</code></td>
+</tr>
+<tr>
+<td><code>nginx_list_parameters</code></td>
+<td style="text-align: right;">62.7 ms</td>
+<td>helper + file reads</td>
+</tr>
+<tr>
+<td><code>read_config</code></td>
+<td style="text-align: right;">8.7 ms</td>
+<td>redaction + formatting</td>
+</tr>
+<tr>
+<td><code>http_probe</code> localhost</td>
+<td style="text-align: right;">18.6 ms</td>
+<td>nginx welcome page</td>
+</tr>
+<tr>
+<td>Full LLM turn (one prompt)</td>
+<td style="text-align: right;">~2.6 s</td>
+<td>includes server startup, tool listing and Groq</td>
+</tr>
+</tbody>
+</table>
+<p>The dominant cost is the LLM API, not Linux. Tool latency is well below the NFR4 target of
+500 ms. A configuration apply in the lab took ~82 ms plus the server's 1 s write throttle;
+the throttle is a safety feature, not a performance problem.</p>
+<h2 id="67-security-evaluation">6.7 Security evaluation</h2>
+<p>The tests and manual review checked:</p>
+<ul>
+<li><strong>Option injection:</strong> <code>-nginx</code>, <code>nginx --now</code>, <code>nginx;rm -rf /</code> are rejected by the
+  regex. A leading <code>-</code> is never passed to <code>systemctl</code>.</li>
+<li><strong>Path traversal:</strong> <code>read_config</code> resolves the path and requires it to be under an
+  allowed root. <code>/etc/passwd</code> is rejected.</li>
+<li><strong>Parameter injection:</strong> <code>client_max_body_size=20x</code>, <code>99999g</code>, <code>worker_processes=65</code> are
+  rejected by both validators.</li>
+<li><strong>Write gate:</strong> with <code>LINUX_AGENT_ALLOW_WRITE=0</code>, a non-dry-run <code>nginx_set_parameter</code>
+  returns an MCP error and does not invoke the helper.</li>
+<li><strong>Dry-run isolation:</strong> the dry run does not create the managed file.</li>
+<li><strong>Failure rollback:</strong> a fake <code>nginx -t</code> failure removes a new file and restores an
+  existing one.</li>
+<li><strong>Audit:</strong> the write-path test asserts that <code>"tool": "nginx_set_parameter"</code> and
+  <code>"ok": true</code> appear in the server audit.</li>
+<li><strong>Secret redaction:</strong> <code>db_password</code>, <code>api_key</code>, bearer tokens and private keys are
+  replaced.</li>
+</ul>
+<p>The remaining risks are discussed below.</p>
+<h2 id="68-discussion-of-results">6.8 Discussion of results</h2>
+<p>The results support the main claim: an LLM can perform useful Linux inspection and a
+controlled configuration change through MCP without receiving a shell. The human approval
+step is visible in the CLI, and the shell helper's backup/test/rollback behaviour is
+independent of the model.</p>
+<p>The evaluation also shows the limits of a small project:</p>
+<ul>
+<li>The model sometimes passes an empty object argument to a no-argument tool
+  (<code>nginx_list_parameters({"": ""})</code> in one run). FastMCP tolerates the extra key, but a
+  stricter client might not. Tool schemas should be respected, and future work should add a
+  schema-conformance check or a retry prompt.</li>
+<li>The model's answer quality varies. The system prompt and the MCP prompt templates reduce
+  but do not eliminate this variance.</li>
+<li>Syntax validation is not intent validation. A human still decides whether 20 MB is the
+  right limit for the application.</li>
+</ul>
+<h1 id="7-discussion-limitations-and-future-work">7. Discussion, Limitations and Future Work</h1>
+<h2 id="71-what-worked">7.1 What worked</h2>
+<ul>
+<li><strong>MCP is a good boundary.</strong> The typed tool list and JSON Schema made the integration
+  straightforward. The model could discover the tools without a custom prompt for each one.</li>
+<li><strong>Dry-run + diff is a strong UX.</strong> The human sees exactly what will change before
+  approving. This is more useful than a generic "are you sure?".</li>
+<li><strong>Two validation layers are cheap.</strong> The Python and shell validators are small, and the
+  tests show they catch the same classes of bad input from different directions.</li>
+<li><strong>The lab is valuable.</strong> It proves the write/rollback path without root and without
+  touching the host. It also makes the demo reproducible on a machine where sudo is not
+  available.</li>
+<li><strong>Audit by default.</strong> The JSONL trail is easy to inspect and was useful during debugging.</li>
+</ul>
+<h2 id="72-limitations">7.2 Limitations</h2>
+<table>
+<thead>
+<tr>
+<th>Limitation</th>
+<th>Why it matters</th>
+<th>Possible improvement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>No built-in HTTP authentication</td>
+<td>Streamable HTTP is localhost-only by default; exposing it is unsafe</td>
+<td>OAuth 2.1, mTLS, or an authenticated reverse proxy</td>
+</tr>
+<tr>
+<td>LLM provider trust</td>
+<td>Prompts and tool results leave the host</td>
+<td>Local model option, redaction before sending, provider policy review</td>
+</tr>
+<tr>
+<td>Approval fatigue</td>
+<td>Users may press <code>y</code> without reading</td>
+<td>Show a compact diff, require typing the parameter name for high-risk changes</td>
+</tr>
+<tr>
+<td>Audit is local and append-only</td>
+<td>A root compromise can alter it</td>
+<td>Remote syslog, hash chaining, signed audit entries</td>
+</tr>
+<tr>
+<td>Redaction is heuristic</td>
+<td>Unusual secret formats may leak</td>
+<td>Structured config parsers, secret scanners, deny-by-default for sensitive files</td>
+</tr>
+<tr>
+<td>nginx only</td>
+<td>The config helper is service-specific</td>
+<td>Add declarative adapters for other services with their own validators</td>
+</tr>
+<tr>
+<td>Syntax validation only</td>
+<td><code>nginx -t</code> cannot know business intent</td>
+<td>Policy tests, canary deployment, health checks after reload</td>
+</tr>
+<tr>
+<td>No multi-file transaction</td>
+<td>A change is atomic per file, not across services</td>
+<td>Transaction manager with a global rollback plan</td>
+</tr>
+<tr>
+<td>Root helper risk</td>
+<td>A bug in the helper runs as root</td>
+<td>Minimal shell, ShellCheck, fuzzing, privilege drop, systemd sandboxing</td>
+</tr>
+<tr>
+<td>Model nondeterminism</td>
+<td>The same prompt may take different paths</td>
+<td>Deterministic tool prompts, schema validation, replay tests</td>
+</tr>
+</tbody>
+</table>
+<h2 id="73-future-work">7.3 Future work</h2>
+<ol>
+<li><strong>Authentication and authorisation for HTTP.</strong> Add OAuth 2.1 or mTLS, per-user tokens
+   and role-based access to write tools.</li>
+<li><strong>Policy engine.</strong> Move allow-lists into OPA/Rego or a signed policy bundle, with
+   time-bound approvals and change windows.</li>
+<li><strong>Richer confirmation.</strong> For destructive actions, require a one-time approval token
+   generated by the server, so the model cannot self-approve even if the CLI is bypassed.</li>
+<li><strong>More service adapters.</strong> PostgreSQL, Redis, SSH, cron and Docker Compose, each with a
+   service-specific validator and rollback plan.</li>
+<li><strong>Sandboxed execution.</strong> Use <code>systemd-run</code> with <code>DynamicUser</code>, <code>ProtectSystem</code>,
+   <code>PrivateTmp</code> and a read-only filesystem for non-privileged tools.</li>
+<li><strong>Local model support.</strong> Add Ollama or vLLM so the project can run without sending data
+   to a cloud provider.</li>
+<li><strong>Evaluation benchmark.</strong> Build a small set of 30–50 Linux tasks with expected tool
+   sequences and safety outcomes, and measure success, tool errors and approval rate.</li>
+<li><strong>Web UI.</strong> A browser UI with a diff view, approval buttons and an audit timeline would
+   make the demo more accessible.</li>
+<li><strong>Remote audit.</strong> Ship JSONL to a remote syslog or object store with hash chaining.</li>
+<li><strong>Formal threat model.</strong> Extend the informal table into STRIDE or LINDDUN and test the
+    HTTP transport with an authenticated proxy.</li>
+</ol>
+<h2 id="74-ethical-and-legal-considerations">7.4 Ethical and legal considerations</h2>
+<ul>
+<li>The system is intended for a lab or a single-tenant host. It is not a multi-tenant
+  control plane and does not implement tenancy isolation.</li>
+<li>The operator remains responsible for every approved change. The agent is an assistant,
+  not an autonomous administrator.</li>
+<li>Logs may contain hostnames, IP addresses and configuration fragments. They should be
+  handled according to the organisation's data policy.</li>
+<li>The project uses a free LLM API. Users should review the provider's data-retention terms
+  before sending production logs.</li>
+</ul>
+<h1 id="8-conclusion">8. Conclusion</h1>
+<p>This project demonstrates a complete agentic Linux automation system built around MCP. The
+agent can inspect a real Ubuntu host, read systemd and nginx state, check a local HTTP
+endpoint, list containers, and change an allow-listed nginx parameter through a root-owned
+helper. The design treats the model as untrusted: no shell, typed tools, two validation
+layers, allow-lists, dry-run defaults, human approval, backups, automatic rollback and an
+audit trail.</p>
+<p>The evaluation is reproducible. Twenty-nine automated tests pass, including an end-to-end
+MCP stdio test and a lab write/rollback test. A real-host run produced an evidence-based
+health summary and a dry-run diff without changing the host. The isolated lab applied a
+20 MB upload limit, verified it, created a timestamped backup and rolled it back without
+root.</p>
+<p>The main lesson is that the hard part of agentic Linux administration is not the LLM call.
+It is the boundary: deciding what the model may ask for, validating it independently,
+making changes reversible, and leaving a record. MCP provides a clean protocol for that
+boundary, and a small amount of careful engineering makes it usable for a course project.</p>
+<h1 id="9-references">9. References</h1>
+<ol>
+<li>Anthropic. <em>Introducing the Model Context Protocol.</em> 2024.
+   <a href="https://www.anthropic.com/news/model-context-protocol">https://www.anthropic.com/news/model-context-protocol</a></li>
+<li>Model Context Protocol. <em>Specification.</em> <a href="https://modelcontextprotocol.io/specification">https://modelcontextprotocol.io/specification</a></li>
+<li>Model Context Protocol. <em>Python SDK / FastMCP.</em>
+   <a href="https://github.com/modelcontextprotocol/python-sdk">https://github.com/modelcontextprotocol/python-sdk</a></li>
+<li>Groq. <em>API documentation and function calling.</em> <a href="https://console.groq.com/docs">https://console.groq.com/docs</a></li>
+<li>systemd. <em>systemctl(1), systemd.unit(5), journalctl(1).</em>
+   <a href="https://www.freedesktop.org/software/systemd/man/">https://www.freedesktop.org/software/systemd/man/</a></li>
+<li>nginx. <em>nginx documentation: configuration file structure, core module, ngx_http_core_module.</em>
+   <a href="https://nginx.org/en/docs/">https://nginx.org/en/docs/</a></li>
+<li>Ubuntu. <em>Ubuntu Server Guide.</em> <a href="https://ubuntu.com/server/docs">https://ubuntu.com/server/docs</a></li>
+<li>Server World. <em>Ubuntu 20.04 server notes.</em>
+   <a href="https://www.server-world.info/en/note?os=Ubuntu_20.04">https://www.server-world.info/en/note?os=Ubuntu_20.04</a></li>
+<li>Sudo. <em>sudoers(5) manual.</em> <a href="https://www.sudo.ws/docs/man/sudoers.man/">https://www.sudo.ws/docs/man/sudoers.man/</a></li>
+<li>OWASP. <em>Top 10 for Large Language Model Applications.</em> 2025.
+    <a href="https://genai.owasp.org/llm-top-10/">https://genai.owasp.org/llm-top-10/</a></li>
+<li>NIST. <em>AI Risk Management Framework (AI RMF 1.0).</em> 2023.</li>
+<li>CMU. <em>Agents course schedule.</em> <a href="https://www.cmu-agents.com/#/schedule">https://www.cmu-agents.com/#/schedule</a></li>
+<li>Linux OSS 2026. <em>Final project instructions</em> (course material).</li>
+<li>Course textbook, chapters 23–37 (server services).</li>
+<li>Python Software Foundation. <em>subprocess, tomllib, asyncio documentation.</em>
+    <a href="https://docs.python.org/3/">https://docs.python.org/3/</a></li>
+</ol>
+<h1 id="10-appendices">10. Appendices</h1>
+<h2 id="appendix-a-tool-catalog-23-tools">Appendix A — Tool catalog (23 tools)</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">#</th>
+<th>Tool</th>
+<th>Read-only</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td><code>system_overview</code></td>
+<td>yes</td>
+<td>Host, OS, kernel, uptime, load, CPU, memory, systemd</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td><code>service_status</code></td>
+<td>yes</td>
+<td><code>systemctl status</code> + recent lines</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td><code>service_logs</code></td>
+<td>yes</td>
+<td><code>journalctl</code> with validated window</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td><code>list_services</code></td>
+<td>yes</td>
+<td>Services by state</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td><code>failed_units</code></td>
+<td>yes</td>
+<td>Failed units</td>
+</tr>
+<tr>
+<td style="text-align: right;">6</td>
+<td><code>disk_usage</code></td>
+<td>yes</td>
+<td>Filesystems</td>
+</tr>
+<tr>
+<td style="text-align: right;">7</td>
+<td><code>process_top</code></td>
+<td>yes</td>
+<td>Top CPU/memory processes</td>
+</tr>
+<tr>
+<td style="text-align: right;">8</td>
+<td><code>network_overview</code></td>
+<td>yes</td>
+<td>Interfaces, routes, DNS</td>
+</tr>
+<tr>
+<td style="text-align: right;">9</td>
+<td><code>listening_ports</code></td>
+<td>yes</td>
+<td>Sockets</td>
+</tr>
+<tr>
+<td style="text-align: right;">10</td>
+<td><code>http_probe</code></td>
+<td>yes</td>
+<td>Local HTTP(S) probe</td>
+</tr>
+<tr>
+<td style="text-align: right;">11</td>
+<td><code>package_info</code></td>
+<td>yes</td>
+<td>Package version and APT policy</td>
+</tr>
+<tr>
+<td style="text-align: right;">12</td>
+<td><code>read_config</code></td>
+<td>yes</td>
+<td>Confined, redacted file read</td>
+</tr>
+<tr>
+<td style="text-align: right;">13</td>
+<td><code>container_list</code></td>
+<td>yes</td>
+<td>Docker containers</td>
+</tr>
+<tr>
+<td style="text-align: right;">14</td>
+<td><code>container_logs</code></td>
+<td>yes</td>
+<td>Docker logs</td>
+</tr>
+<tr>
+<td style="text-align: right;">15</td>
+<td><code>nginx_info</code></td>
+<td>yes</td>
+<td>Version, unit state, <code>nginx -t</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">16</td>
+<td><code>nginx_list_parameters</code></td>
+<td>yes</td>
+<td>Current managed values</td>
+</tr>
+<tr>
+<td style="text-align: right;">17</td>
+<td><code>nginx_get_parameter</code></td>
+<td>yes</td>
+<td>One value</td>
+</tr>
+<tr>
+<td style="text-align: right;">18</td>
+<td><code>nginx_test_config</code></td>
+<td>yes</td>
+<td>Privileged <code>nginx -t</code></td>
+</tr>
+<tr>
+<td style="text-align: right;">19</td>
+<td><code>nginx_list_backups</code></td>
+<td>yes</td>
+<td>Backups</td>
+</tr>
+<tr>
+<td style="text-align: right;">20</td>
+<td><code>nginx_diff_backup</code></td>
+<td>yes</td>
+<td>Backup diff</td>
+</tr>
+<tr>
+<td style="text-align: right;">21</td>
+<td><code>service_action</code></td>
+<td>no</td>
+<td>Allow-listed systemd action</td>
+</tr>
+<tr>
+<td style="text-align: right;">22</td>
+<td><code>nginx_set_parameter</code></td>
+<td>no</td>
+<td>Validated nginx change</td>
+</tr>
+<tr>
+<td style="text-align: right;">23</td>
+<td><code>nginx_rollback</code></td>
+<td>no</td>
+<td>Restore a backup</td>
+</tr>
+</tbody>
+</table>
+<h2 id="appendix-b-policy-file-excerpt">Appendix B — Policy file (excerpt)</h2>
+<pre><code class="language-toml">[security]
+allow_write = false
+audit_log = &quot;logs/audit.jsonl&quot;
+max_output_bytes = 24000
+read_timeout_seconds = 20
+write_timeout_seconds = 60
+min_write_interval_seconds = 1.0
+
+[units]
+allowed = [&quot;nginx&quot;]
+actions = [&quot;start&quot;, &quot;stop&quot;, &quot;restart&quot;, &quot;reload&quot;]
+
+[helpers]
+dir = &quot;/usr/local/libexec/linux-agent&quot;
+nginx = &quot;nginx_param.sh&quot;
+service = &quot;service_ctl.sh&quot;
+use_sudo = true
+
+[nginx.parameters.client_max_body_size]
+context = &quot;http&quot;
+pattern = &quot;^(0|[1-9][0-9]{0,4}[kKmMgG]?)$&quot;
+description = &quot;Maximum request body size, for example 1m or 20m (0 = unlimited).&quot;
+</code></pre>
+<h2 id="appendix-c-commands">Appendix C — Commands</h2>
+<pre><code class="language-bash"># Read-only
+.venv/bin/python agent.py --list-tools
+.venv/bin/python agent.py
+
+# Install privileged helpers (once)
+sudo scripts/install_privileged.sh --user &quot;$USER&quot; --units &quot;nginx&quot;
+sudo -n /usr/local/libexec/linux-agent/nginx_param.sh list
+
+# Enable writes for one session
+LINUX_AGENT_ALLOW_WRITE=1 .venv/bin/python agent.py
+
+# HTTP transport
+.venv/bin/python server.py --transport streamable-http --host 127.0.0.1 --port 8000
+.venv/bin/python agent.py --transport streamable-http --url http://127.0.0.1:8000/mcp
+
+# Tests and lab
+make test
+bash scripts/lab_demo.sh
+LAB_AGENT=1 bash scripts/lab_demo.sh
+</code></pre>
+<h2 id="appendix-d-test-output">Appendix D — Test output</h2>
+<pre><code class="language-text">$ .venv/bin/python -m unittest discover -v
+...
+Ran 29 tests in 4.394s
+
+OK
+</code></pre>
+<h2 id="appendix-e-demo-evidence">Appendix E — Demo evidence</h2>
+<p>The full isolated-lab transcript is stored in <code>docs/evidence/lab-demo.txt</code>. The report's
+Chapter 6 quotes the apply, verify, backup and rollback sections. The real-host read-only
+run is reproducible with the prompt in Section 6.5.</p>
+<h2 id="appendix-f-group-work-allocation-template">Appendix F — Group work allocation (template)</h2>
+<table>
+<thead>
+<tr>
+<th>Member</th>
+<th>Tasks</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[Member 1]</td>
+<td>MCP server, diagnostics tools, security module</td>
+<td>commits, tests</td>
+</tr>
+<tr>
+<td>[Member 2]</td>
+<td>Agent loop, approval gate, CLI, Groq integration</td>
+<td>commits, demo</td>
+</tr>
+<tr>
+<td>[Member 3]</td>
+<td>nginx helper, installer, tests, report, slides</td>
+<td>commits, report</td>
+</tr>
+</tbody>
+</table>
+<h2 id="appendix-g-mapping-to-the-course-requirements">Appendix G — Mapping to the course requirements</h2>
+<table>
+<thead>
+<tr>
+<th>Course requirement</th>
+<th>Where it is addressed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Research the selected server service</td>
+<td>Chapter 2 (nginx, systemd), Chapters 4–5</td>
+</tr>
+<tr>
+<td>Write an extra shell script to change service configuration parameters</td>
+<td><code>scripts/nginx_param.sh</code>, Section 5.6</td>
+</tr>
+<tr>
+<td>Understand compilation / recompilation (open-source direction)</td>
+<td>Not the selected direction; the project uses the agentic AI direction</td>
+</tr>
+<tr>
+<td>Deploy and manage services</td>
+<td>MCP server, systemd helpers, nginx, Docker inspection</td>
+</tr>
+<tr>
+<td>Research agentic AI architecture and tool use</td>
+<td>Chapters 2 and 4</td>
+</tr>
+<tr>
+<td>Study MCP or another tool-integration mechanism</td>
+<td>Sections 2.3 and 5.3</td>
+</tr>
+<tr>
+<td>Deploy an MCP server in Linux</td>
+<td><code>server.py</code>, stdio and HTTP transports</td>
+</tr>
+<tr>
+<td>Develop several practical tools</td>
+<td>23 tools, Appendix A</td>
+</tr>
+<tr>
+<td>Integrate the tools with an AI agent</td>
+<td><code>linux_agent/agent/</code>, Groq function calling</td>
+</tr>
+<tr>
+<td>Demonstrate real interaction with Linux services</td>
+<td>Chapters 6, <code>docs/demo.md</code>, evidence</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><em>End of report.</em></p>
+</body>
+</html>

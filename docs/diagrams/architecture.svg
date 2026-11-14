@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620">
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+    <style>
+      .title { font: 700 20px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .h { font: 700 15px "DejaVu Sans", sans-serif; fill: #0f172a; }
+      .t { font: 12px "DejaVu Sans", sans-serif; fill: #334155; }
+      .small { font: 11px "DejaVu Sans", sans-serif; fill: #475569; }
+      .box { fill: #f8fafc; stroke: #475569; stroke-width: 1.4; rx: 9; }
+      .blue { fill: #e0f2fe; stroke: #0369a1; stroke-width: 1.4; rx: 9; }
+      .amber { fill: #fef3c7; stroke: #b45309; stroke-width: 1.4; rx: 9; }
+      .green { fill: #dcfce7; stroke: #15803d; stroke-width: 1.4; rx: 9; }
+      .red { fill: #fee2e2; stroke: #b91c1c; stroke-width: 1.4; rx: 9; }
+      .arrow { stroke: #334155; stroke-width: 1.7; fill: none; marker-end: url(#a); }
+    </style>
+  </defs>
+
+  <rect width="1100" height="620" fill="#ffffff"/>
+  <text x="550" y="30" text-anchor="middle" class="title">Linux Agent component architecture</text>
+
+  <rect x="400" y="55" width="300" height="55" class="blue"/>
+  <text x="550" y="78" text-anchor="middle" class="h">User</text>
+  <text x="550" y="97" text-anchor="middle" class="small">natural language, approval y/N/a</text>
+
+  <rect x="330" y="145" width="440" height="130" class="blue"/>
+  <text x="550" y="170" text-anchor="middle" class="h">Agent CLI + MCP client</text>
+  <text x="550" y="192" text-anchor="middle" class="small">plan / act / observe loop, max steps</text>
+  <text x="550" y="212" text-anchor="middle" class="small">Groq function calling, retries, truncation</text>
+  <text x="550" y="232" text-anchor="middle" class="small">approval gate + session JSONL</text>
+  <rect x="355" y="245" width="170" height="22" class="box"/>
+  <text x="440" y="260" text-anchor="middle" class="small">logs/sessions/*.jsonl</text>
+  <rect x="545" y="245" width="200" height="22" class="box"/>
+  <text x="645" y="260" text-anchor="middle" class="small">config/policy.toml</text>
+
+  <rect x="330" y="315" width="440" height="120" class="amber"/>
+  <text x="550" y="340" text-anchor="middle" class="h">MCP server (FastMCP)</text>
+  <text x="550" y="362" text-anchor="middle" class="small">23 typed tools, 4 resources, 3 prompts</text>
+  <text x="550" y="382" text-anchor="middle" class="small">security.py: regex, allow-list, path, redaction</text>
+  <text x="550" y="402" text-anchor="middle" class="small">runner.py: fixed argv, no shell, timeout</text>
+  <text x="550" y="422" text-anchor="middle" class="small">runtime.py: write gate, throttle, audit</text>
+
+  <rect x="70" y="315" width="210" height="120" class="box"/>
+  <text x="175" y="340" text-anchor="middle" class="h">Read-only path</text>
+  <text x="175" y="365" text-anchor="middle" class="small">systemctl, journalctl</text>
+  <text x="175" y="385" text-anchor="middle" class="small">df, ps, ss, ip, dpkg</text>
+  <text x="175" y="405" text-anchor="middle" class="small">docker, httpx localhost</text>
+
+  <rect x="820" y="315" width="220" height="120" class="red"/>
+  <text x="930" y="340" text-anchor="middle" class="h">Privileged helpers</text>
+  <text x="930" y="362" text-anchor="middle" class="small">root:root 0755</text>
+  <text x="930" y="382" text-anchor="middle" class="small">sudoers Cmnd_Alias</text>
+  <text x="930" y="402" text-anchor="middle" class="small">service_ctl.sh</text>
+  <text x="930" y="422" text-anchor="middle" class="small">nginx_param.sh</text>
+
+  <rect x="380" y="485" width="150" height="75" class="green"/>
+  <text x="455" y="510" text-anchor="middle" class="h">systemd</text>
+  <text x="455" y="532" text-anchor="middle" class="small">units, journal</text>
+  <rect x="555" y="485" width="150" height="75" class="green"/>
+  <text x="630" y="510" text-anchor="middle" class="h">nginx</text>
+  <text x="630" y="532" text-anchor="middle" class="small">config, reload</text>
+  <rect x="730" y="485" width="180" height="75" class="green"/>
+  <text x="820" y="510" text-anchor="middle" class="h">Backups + audit</text>
+  <text x="820" y="532" text-anchor="middle" class="small">/var/backups, logs</text>
+
+  <line x1="550" y1="110" x2="550" y2="140" class="arrow"/>
+  <text x="560" y="130" class="small">intent</text>
+  <line x1="550" y1="275" x2="550" y2="310" class="arrow"/>
+  <text x="560" y="298" class="small">tools/call</text>
+  <line x1="325" y1="375" x2="285" y2="375" class="arrow"/>
+  <text x="305" y="363" class="small">fixed argv</text>
+  <line x1="775" y1="375" x2="815" y2="375" class="arrow"/>
+  <text x="795" y="363" class="small">sudo -n</text>
+  <line x1="930" y1="440" x2="830" y2="480" class="arrow"/>
+  <text x="895" y="468" class="small">apply / rollback</text>
+  <line x1="175" y1="440" x2="410" y2="482" class="arrow"/>
+  <text x="270" y="470" class="small">inspect</text>
+  <line x1="630" y1="440" x2="630" y2="480" class="arrow"/>
+  <line x1="730" y1="375" x2="770" y2="420" class="arrow"/>
+  <text x="765" y="410" class="small">audit</text>
+</svg>
